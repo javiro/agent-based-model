@@ -109,11 +109,11 @@ class AgentGame(object):
 
         """
         if self.use_prob_revision == 'ON':
-            for player_1 in self.Agents.population:
+            for player_1 in self.agents.population:
                 if random.random() < self.prob_revision:
                     player_1.update_strategy(self)
         else:
-            revising_population = random.sample(self.Agents.population, self.n_of_revisions_per_tick)
+            revising_population = random.sample(self.agents.population, self.n_of_revisions_per_tick)
             for player_1 in revising_population:
                 player_1.update_strategy(self)
 
@@ -122,7 +122,7 @@ class AgentGame(object):
                               [0, 1 + (np.cos(self.payoffs_velocity * g) + 1) / 2]]
 
     def plot_distributions(self, g, plot_dist, ax):
-        distribution = self.Agents.get_strategy_distribution()
+        distribution = self.agents.get_strategy_distribution()
         plot_dist.append(distribution[::-1] / sum(distribution))
         df_plot_dist = pd.DataFrame(plot_dist)
         colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w'][:len(distribution)]
@@ -136,7 +136,7 @@ class AgentGame(object):
         print("Second {}: {}".format(g / self.ticks_per_second, distribution))
 
     def get_expectation_value(self):
-        distribution = self.Agents.get_strategy_distribution()
+        distribution = self.agents.get_strategy_distribution()
         # expectation = integral [x f_bar dx], f_bar = f / integral [f_dx]
         x = range(self.num_of_channels)
         integral_f_dx = sum(distribution * np.diff(range(self.num_of_channels + 1)))
@@ -152,7 +152,7 @@ class AgentGame(object):
         return dist_of_states
 
     def get_count_of_states(self):
-        distribution = self.Agents.get_strategy_distribution()
+        distribution = self.agents.get_strategy_distribution()
         self.count_of_states[distribution[1]] += 1
         return self.count_of_states
 
@@ -200,8 +200,8 @@ class AgentGame(object):
                 expectation = self.get_mean_dynamics()
                 mean_dynamic.append(expectation)
                 if self.microstates == 'ON':
-                    [f.write('{},'.format(player.strategy)) for player in self.Agents.population[:-1]]
-                    f.write('{}'.format(self.Agents.population[-1].strategy))
+                    [f.write('{},'.format(player.strategy)) for player in self.agents.population[:-1]]
+                    f.write('{}'.format(self.agents.population[-1].strategy))
                     f.write('\n')
         if self.microstates == 'ON':
             f.close()
@@ -211,4 +211,4 @@ class AgentGame(object):
         else:
             plt.plot(mean_dynamic)
             plt.show(block=True)
-        return self.Agents.get_strategy_distribution(), plot_dist
+        return self.agents.get_strategy_distribution(), plot_dist

@@ -1,7 +1,9 @@
+import seaborn as sns
+
 from src.common.base.game import AgentGame
 
 
-def main():
+def play_coordination_bep():
     game_rounds = 1000
     ticks_per_second = 5
     num_of_channels = 2
@@ -35,7 +37,7 @@ def main():
                   consider_imitating_self,
                   payoff_matrix=coordination,
                   payoffs_velocity=payoffs_velocity,
-                  revision_protocol="pair")
+                  revision_protocol="bep")
 
     print(g.agents.get_strategy_distribution())
     g.simulate_agent_game('microstates')
@@ -57,7 +59,3 @@ def main():
     #                   microstates=microstates)
     #     g.simulate_drone_game('microstates{}'.format(i))
     # print(g.drones.get_strategy_distribution())
-
-
-if __name__ == '__main__':
-    main()
