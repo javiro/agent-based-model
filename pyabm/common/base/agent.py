@@ -1,7 +1,7 @@
 import random
 import numpy as np
 
-from src.common.constants import BEP, PAIRWISE_DIFFERENCE, LINEAR_DISSATISFACTION
+from pyabm.common.constants import BEP, PAIRWISE_DIFFERENCE, LINEAR_DISSATISFACTION
 
 
 class Agent(object):

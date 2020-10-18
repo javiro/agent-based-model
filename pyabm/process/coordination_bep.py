@@ -1,7 +1,7 @@
 import seaborn as sns
 
-from src.common.base.game import AgentGame
-from src.common.constants import BEP
+from pyabm.common.base.game import AgentGame
+from pyabm.common.constants import BEP
 
 
 def play_coordination_bep():
