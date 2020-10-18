@@ -5,8 +5,8 @@ import scipy.special
 
 from matplotlib import pyplot as plt
 
-from src.common.base.population import AgentPopulation
-from src.common.constants import *
+from pyabm.common.base.population import AgentPopulation
+from pyabm.common.constants import *
 
 
 class AgentGame(object):
