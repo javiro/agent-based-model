@@ -1,15 +1,16 @@
 import seaborn as sns
 
 from src.common.base.game import AgentGame
+from src.common.constants import PAIRWISE_DIFFERENCE, OFF
 
 
 def play_coordination_pairwise_difference():
-    game_rounds = 1000
+    game_rounds = 500
     ticks_per_second = 5
     num_of_channels = 2
-    n_of_agents = 6
+    n_of_agents = 200
     n_of_candidates = num_of_channels
-    random_initial_condition = [3, 3]
+    random_initial_condition = [150, 50]
     prob_revision = 0.2
     n_of_revisions_per_tick = 10
     n_of_trials = 1
@@ -23,6 +24,7 @@ def play_coordination_pairwise_difference():
     flg = [[1, 2, 3], [4, 3, 4], [3, 2, 5]]
     # coordination = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
     coordination = [[1, 0], [0, 2]]
+    show_plot_distribution = OFF
     g = AgentGame(game_rounds,
                   num_of_channels,
                   n_of_agents,
@@ -37,7 +39,8 @@ def play_coordination_pairwise_difference():
                   consider_imitating_self,
                   payoff_matrix=coordination,
                   payoffs_velocity=payoffs_velocity,
-                  revision_protocol="pair")
+                  revision_protocol=PAIRWISE_DIFFERENCE,
+                  show_plot_distribution=show_plot_distribution)
 
     print(g.agents.get_strategy_distribution())
     g.simulate_agent_game('microstates')

@@ -6,7 +6,7 @@ import scipy.special
 from matplotlib import pyplot as plt
 
 from src.common.base.population import AgentPopulation
-from src.common.constants import BEP
+from src.common.constants import *
 
 
 class AgentGame(object):
@@ -24,9 +24,9 @@ class AgentGame(object):
     """
 
     def __init__(self, game_rounds, num_of_channels, n_of_agents, n_of_candidates, random_initial_condition,
-                 prob_revision=0.001, n_of_revisions_per_tick=10, n_of_trials=10, use_prob_revision='ON',
-                 mean_dynamics='OFF', ticks_per_second=5, consider_imitating_self=True, payoff_matrix=None,
-                 microstates='OFF', payoffs_velocity=0.5, revision_protocol=BEP):
+                 prob_revision=0.001, n_of_revisions_per_tick=10, n_of_trials=10, use_prob_revision=ON,
+                 mean_dynamics=OFF, ticks_per_second=5, consider_imitating_self=True, payoff_matrix=None,
+                 microstates=OFF, payoffs_velocity=0.5, revision_protocol=BEP, show_plot_distribution=ON):
         """
         Complete matching is off since BEP does not consider it. Then the agents play his current strategy against a
         random sample of opponents. The size of this sample is specified by the parameter n-of-trials.
@@ -57,6 +57,7 @@ class AgentGame(object):
         """
         # Set internal parameters
         self.game_rounds = game_rounds
+        self.tick = None
         self.num_of_channels = num_of_channels
         self.n_of_agents = n_of_agents
         self.n_of_candidates = n_of_candidates
@@ -67,11 +68,12 @@ class AgentGame(object):
         self.use_prob_revision = use_prob_revision
         self.consider_imitating_self = consider_imitating_self
         self.payoff_matrix = self.get_payoff_matrix(payoff_matrix)
+        self.maximun_payoff = np.max(self.payoff_matrix)
         self.mean_dynamics = mean_dynamics
         self.microstates = microstates
         self.payoffs_velocity = payoffs_velocity
         self.revision_protocol = revision_protocol
-        print(self.revision_protocol)
+        self.show_plot_distribution = show_plot_distribution
         self.agents = AgentPopulation(self.n_of_agents,
                                       self.num_of_channels,
                                       self.revision_protocol,
@@ -90,7 +92,7 @@ class AgentGame(object):
         else:
             payoff_matrix = np.array(payoff_matrix)
             assert payoff_matrix.shape == (n, n)
-            return np.array(payoff_matrix)
+            return payoff_matrix
 
     def play_agent_game(self, player_1, player_2):
         return player_1 @ self.payoff_matrix @ player_2
@@ -102,13 +104,13 @@ class AgentGame(object):
         return strategies
 
     def update_strategies(self):
-        """Under the best experienced payoff protocol, a revising agent tests each of the 'n_of_candidates' of
+        """Under the best experienced payoff protocol, a revising agent tests each of the "n_of_candidates" of
         strategies against a random agent, with each play of each strategy being against a newly drawn opponent.
         The revising agent then selects the strategy that obtained the greater payoff in the test, with ties resolved
         at random.
 
         """
-        if self.use_prob_revision == 'ON':
+        if self.use_prob_revision == ON:
             for player_1 in self.agents.population:
                 if random.random() < self.prob_revision:
                     player_1.update_strategy(self)
@@ -118,22 +120,25 @@ class AgentGame(object):
                 player_1.update_strategy(self)
 
     def update_payoff_matrix(self, g):
-        self.payoff_matrix = [[1 + (np.sin(self.payoffs_velocity * g) + 1) / 2, 0],
-                              [0, 1 + (np.cos(self.payoffs_velocity * g) + 1) / 2]]
+        if self.payoff_matrix.shape == 2:
+            self.payoff_matrix = np.array([[1 + (np.sin(self.payoffs_velocity * g) + 1) / 2, 0],
+                                           [0, 1 + (np.cos(self.payoffs_velocity * g) + 1) / 2]])
 
-    def plot_distributions(self, g, plot_dist, ax):
+    def logging_distributions(self, g, plot_dist, ax):
         distribution = self.agents.get_strategy_distribution()
-        plot_dist.append(distribution[::-1] / sum(distribution))
-        df_plot_dist = pd.DataFrame(plot_dist)
-        colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w'][:len(distribution)]
-        df_plot_dist.columns = ['c{}'.format(i) for i in range(len(df_plot_dist.columns))]
-        plt.stackplot(df_plot_dist.index,
-                      [df_plot_dist['{}'.format(c)].values for c in df_plot_dist.columns],
-                      colors=colors)
-        plt.title("Second {}".format(g / self.ticks_per_second))
-        plt.draw()
-        plt.pause(0.0001)
-        print("Second {}: {}".format(g / self.ticks_per_second, distribution))
+        if self.show_plot_distribution == ON:
+            plot_dist.append(distribution[::-1] / sum(distribution))
+            df_plot_dist = pd.DataFrame(plot_dist)
+            colors = [B, G, R, C, M, Y, K, K][:len(distribution)]
+            df_plot_dist.columns = ["c{}".format(i) for i in range(len(df_plot_dist.columns))]
+            plt.stackplot(df_plot_dist.index,
+                          [df_plot_dist["{}".format(c)].values for c in df_plot_dist.columns],
+                          colors=colors)
+            plt.title("Second {}".format(g / self.ticks_per_second))
+            plt.draw()
+            plt.pause(0.0001)
+        print("Percentage of strategy 2 at time {}: {}"
+              .format(g / self.ticks_per_second, distribution[-1] / self.n_of_agents))
 
     def get_expectation_value(self):
         distribution = self.agents.get_strategy_distribution()
@@ -170,7 +175,7 @@ class AgentGame(object):
 
     def simulate_agent_game(self, output_file):
         """
-        Under the best experienced payoff protocol, a revising agent tests each of the 'n_of_candidates' of strategies
+        Under the best experienced payoff protocol, a revising agent tests each of the "n_of_candidates" of strategies
         against a random agent, with each play of each strategy being against a newly drawn opponent. The revising
         agent then selects the strategy that obtained the greater payoff in the test, with ties resolved at random.
         :param output_file:
@@ -178,35 +183,36 @@ class AgentGame(object):
         """
         plt.figure()
         length_x = self.game_rounds / self.ticks_per_second
-        if self.mean_dynamics == 'OFF':
+        if self.mean_dynamics == OFF:
             ax = plt.axes(xlim=(0, length_x), ylim=(0, 1))
         else:
             ax = plt.axes()
-        plt.xlabel("Seconds")
-        plt.ylabel("Distribution")
+        plt.xlabel(SECONDS)
+        plt.ylabel(DISTRIBUTION)
         plot_dist = []
         mean_dynamic = []
         plt.ion()
-        if self.microstates == 'ON':
-            f = open(output_file, 'a')
+        if self.microstates == ON:
+            f = open(output_file, "a")
 
         for g in range(self.game_rounds):
+            self.tick = g
             self.update_strategies()
-            if (g % self.ticks_per_second == 0) & (self.mean_dynamics == 'OFF'):
-                self.plot_distributions(g, plot_dist, ax)
+            if (g % self.ticks_per_second == 0) & (self.mean_dynamics == OFF):
+                self.logging_distributions(g, plot_dist, ax)
                 self.update_payoff_matrix(g / self.ticks_per_second)
             else:
                 # expectation = self.get_expectation_value()
                 expectation = self.get_mean_dynamics()
                 mean_dynamic.append(expectation)
-                if self.microstates == 'ON':
-                    [f.write('{},'.format(player.strategy)) for player in self.agents.population[:-1]]
-                    f.write('{}'.format(self.agents.population[-1].strategy))
-                    f.write('\n')
-        if self.microstates == 'ON':
+                if self.microstates == ON:
+                    [f.write("{},".format(player.strategy)) for player in self.agents.population[:-1]]
+                    f.write("{}".format(self.agents.population[-1].strategy))
+                    f.write("\n")
+        if self.microstates == ON:
             f.close()
 
-        if self.mean_dynamics == 'OFF':
+        if self.mean_dynamics == OFF:
             plt.show()
         else:
             plt.plot(mean_dynamic)

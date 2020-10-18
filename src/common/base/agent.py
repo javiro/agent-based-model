@@ -1,7 +1,7 @@
 import random
 import numpy as np
 
-from src.common.constants import BEP
+from src.common.constants import BEP, PAIRWISE_DIFFERENCE, LINEAR_DISSATISFACTION
 
 
 class Agent(object):
@@ -13,11 +13,13 @@ class Agent(object):
         :param player_id:
         :param num_of_channels:
         :param strategy:
+        :param revision_protocol:
         """
         # Set internal parameters
         self.player_id = player_id
         self.num_of_channels = num_of_channels
         self.revision_protocol = revision_protocol
+        self.avg_payoff = 0
         if strategy is None:
             self.strategy = random.randint(0, num_of_channels - 1)
         else:
@@ -27,6 +29,10 @@ class Agent(object):
         player = np.zeros(self.num_of_channels)
         player[strategy] = 1
         return player
+
+    def update_avg_payoff(self, payoff, tick):
+        if tick > 0:
+            self.avg_payoff = (self.avg_payoff * (tick - 1) + payoff) / tick
 
     def update_strategy(self, game):
         """Under the best experienced payoff protocol, a revising agent tests each of the 'n_of_candidates' of
@@ -50,7 +56,7 @@ class Agent(object):
                 games.append(max(trials))
             games = np.array(games)
             self.strategy = n_of_candidates[random.choice(np.where(games == np.max(games))[0])]
-        else:
+        elif self.revision_protocol == PAIRWISE_DIFFERENCE:
             revising_opponent = game.agents.get_player(self)
             payoff_revising_player = game.play_agent_game(self.set_strategy(self.strategy),
                                                           revising_opponent.set_strategy(revising_opponent.strategy))
@@ -63,3 +69,20 @@ class Agent(object):
                                          (payoff_revising_player + payoff_imitating_player), 0)
                 if random.random() < change_probability:
                     self.strategy = imitating_player.strategy
+        elif self.revision_protocol == LINEAR_DISSATISFACTION:
+            player_2 = game.agents.get_player(self)
+            payoff = game.play_agent_game(self.set_strategy(self.strategy), player_2.set_strategy(player_2.strategy))
+            self.update_avg_payoff(payoff, game.tick)
+            probability_of_change = (game.maximun_payoff - self.avg_payoff) / (game.maximun_payoff + self.avg_payoff)
+            if random.random() < probability_of_change:
+                strategies = list(range(game.payoff_matrix.shape[0]))
+                strategies.remove(self.strategy)
+                self.strategy = np.random.choice(strategies)
+
+            # if self.player_id == 10:
+            #     print("El promedio de pagos es: {}".format(self.avg_payoff))
+            # linear-*, the agent switches to the alternative strategy with probability proportional to the
+            # difference between the maximum possible payoff in the game and the revising agent’s average payoff (
+            # under linear- dissatisfaction), or between the alternative strategy’s average payoff and the minimum
+            # possible payoff in the game (under linear-attraction).
+            pass
