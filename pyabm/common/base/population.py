@@ -1,7 +1,7 @@
 import random
 import numpy as np
 
-from src.common.base.agent import Agent
+from pyabm.common.base.agent import Agent
 
 
 class AgentPopulation(object):
