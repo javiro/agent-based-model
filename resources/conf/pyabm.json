@@ -9,8 +9,9 @@
     "number_of_trials": 1,
     "use_probability_of_revision": "ON",
     "consider_imitating_self": true,
-    "mean_dynamics": "OFF",
+    "mean_dynamics": "ON",
     "payoffs_velocity_of_change": 0.2,
 	"matrix_payoffs": [[1, 0], [0, 2]],
-    "show_plot_distribution": "ON"
+    "show_plot_distribution": "OFF",
+    "revision_protocol": "linear-dissatisfaction"
 }
