@@ -44,6 +44,7 @@ PAYOFFS_VELOCITY_OF_CHANGE = "payoffs_velocity_of_change"
 MATRIX_PAYOFFS = "matrix_payoffs"
 SHOW_PLOT_DISTRIBUTION = "show_plot_distribution"
 REVISION_PROTOCOL = "revision_protocol"
+NUMBER_OF_SIMULATIONS = "number_of_simulations"
 
 ########################################################################################################################
 # EXCEPTIONS

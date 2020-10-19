@@ -112,14 +112,16 @@ class AgentGame(object):
                 player_1.update_strategy(self)
 
     def update_payoff_matrix(self, g):
-        if self.payoff_matrix.shape == 2:
+        if self.payoff_matrix.shape[0] == 2:
             self.payoff_matrix = np.array([[1 + (np.sin(self.payoffs_velocity * g) + 1) / 2, 0],
                                            [0, 1 + (np.cos(self.payoffs_velocity * g) + 1) / 2]])
 
-    def logging_distributions(self, g, plot_dist, ax):
+    def logging_distributions(self, g, plot_dist, ax=None):
         distribution = self.agents.get_strategy_distribution()
         if self.show_plot_distribution == ON:
             plot_distribution(g, self.ticks_per_second, distribution, plot_dist)
+        else:
+            plot_dist.append(distribution[-1] / self.n_of_agents)
         print("Percentage of strategy 2 at time {}: {}"
               .format(g / self.ticks_per_second, distribution[-1] / self.n_of_agents))
 
@@ -151,18 +153,21 @@ class AgentGame(object):
 
         :return: the distribution of strategies and a list needed to plot it.
         """
-        plt.figure()
-        length_x = self.game_rounds / self.ticks_per_second
-        if self.mean_dynamics == OFF:
-            ax = plt.axes(xlim=(0, length_x), ylim=(0, 1))
+        if self.show_plot_distribution == ON:
+            plt.figure()
+            length_x = self.game_rounds / self.ticks_per_second
+            if self.mean_dynamics == OFF:
+                ax = plt.axes(xlim=(0, length_x), ylim=(0, 1))
+            else:
+                ax = plt.axes()
+            plt.xlabel(SECONDS)
+            plt.ylabel(DISTRIBUTION)
+            plt.ion()
         else:
-            ax = plt.axes()
-        plt.xlabel(SECONDS)
-        plt.ylabel(DISTRIBUTION)
+            ax = None
+
         plot_dist = []
         mean_dynamic = []
-        plt.ion()
-
         for g in range(self.game_rounds):
             self.tick = g
             self.update_strategies()
@@ -174,7 +179,7 @@ class AgentGame(object):
                 mean_dynamic.append(expectation)
 
         if self.mean_dynamics == OFF:
-            plt.show()
+            pass
         else:
             plt.plot(mean_dynamic)
             plt.show(block=True)

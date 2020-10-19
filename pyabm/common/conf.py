@@ -135,3 +135,11 @@ class Conf:
         if revision_protocol not in allowed_protocols:
             raise PyABMException(NOT_VALID_PROTOCOL.format(revision_protocol, allowed_protocols))
         return revision_protocol
+
+    @handle_config_parser_exception("Configuration error: ")
+    def get_number_of_simulations(self):
+        """Returns the number of simulations to carry on.
+
+        :return: the number of simulations.
+        """
+        return self.conf[NUMBER_OF_SIMULATIONS]
