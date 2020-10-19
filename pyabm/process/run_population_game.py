@@ -1,8 +1,5 @@
-import seaborn as sns
-
 from pyabm.common.base.game import AgentGame
 from pyabm.common.conf import Conf
-from pyabm.common.constants import PAIRWISE_DIFFERENCE, OFF
 
 
 def play_population_game():
@@ -23,6 +20,7 @@ def play_population_game():
     payoffs_velocity = conf.get_payoffs_velocity_of_change()
     coordination = conf.get_matrix_payoffs()
     show_plot_distribution = conf.get_show_plot_distribution()
+    revision_protocol = conf.get_revision_protocol()
     g = AgentGame(game_rounds,
                   num_of_channels,
                   n_of_agents,
@@ -37,26 +35,9 @@ def play_population_game():
                   consider_imitating_self,
                   payoff_matrix=coordination,
                   payoffs_velocity=payoffs_velocity,
-                  revision_protocol=PAIRWISE_DIFFERENCE,
+                  revision_protocol=revision_protocol,
                   show_plot_distribution=show_plot_distribution)
 
     print(g.agents.get_strategy_distribution())
-    g.simulate_agent_game('microstates')
+    g.simulate_agent_game()
     print(g.agents.get_strategy_distribution())
-
-    # for i in range(10):
-    #     g = DroneGame(game_rounds,
-    #                   num_of_channels,
-    #                   n_of_agents,
-    #                   n_of_candidates,
-    #                   random_initial_condition,
-    #                   prob_revision,
-    #                   n_of_revisions_per_tick,
-    #                   n_of_trials,
-    #                   use_prob_revision,
-    #                   mean_dynamics,
-    #                   ticks_per_second,
-    #                   consider_imitating_self,
-    #                   microstates=microstates)
-    #     g.simulate_drone_game('microstates{}'.format(i))
-    # print(g.drones.get_strategy_distribution())

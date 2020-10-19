@@ -4,4 +4,20 @@ This code allows us to run simulations of populations of agents playing a 2x2 sy
 game theory frame.
 
 ## Classes.
-- Agent: 
+### Agent.
+The agents are the minimal units interacting in the simulation. They can:
+- set_strategy
+- update_avg_payoff
+- update_strategy
+
+### Game.
+It's a population game which gives some random agents the possibility of revisiting their strategies, at each tick of
+time.
+It has the methods:
+-
+ 
+
+### Population.
+
+
+ 
