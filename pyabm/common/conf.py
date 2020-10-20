@@ -93,14 +93,6 @@ class Conf:
         return self.conf[CONSIDER_IMITATING_SELF]
 
     @handle_config_parser_exception("Configuration error: ")
-    def get_mean_dynamics(self):
-        """Returns true in case of mean dynamics is switched on.
-
-        :return: the consideration of imitating self.
-        """
-        return self.conf[MEAN_DYNAMICS]
-
-    @handle_config_parser_exception("Configuration error: ")
     def get_payoffs_velocity_of_change(self):
         """Returns the velocity of change of the payoffs.
 

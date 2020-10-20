@@ -11,7 +11,7 @@
     "consider_imitating_self": true,
     "payoffs_velocity_of_change": 0.00002,
 	"matrix_payoffs": [[1, 0], [0, 2]],
-    "show_plot_distribution": "OFF",
+    "show_plot_distribution": "ON",
     "revision_protocol": "linear-dissatisfaction",
     "number_of_simulations": 10
 }

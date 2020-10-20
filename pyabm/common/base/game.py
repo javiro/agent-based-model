@@ -2,11 +2,9 @@ import random
 import numpy as np
 import scipy.special
 
-from matplotlib import pyplot as plt
-
 from pyabm.common.base.population import AgentPopulation
 from pyabm.common.constants import *
-from pyabm.common.utils.plot import plot_distribution
+from pyabm.common.utils.plot import prepare_plot, plot_distribution
 
 
 class AgentGame(object):
@@ -25,8 +23,8 @@ class AgentGame(object):
 
     def __init__(self, game_rounds, num_of_channels, n_of_agents, n_of_candidates, random_initial_condition,
                  prob_revision=0.001, n_of_revisions_per_tick=10, number_of_trials=10, use_prob_revision=ON,
-                 mean_dynamics=OFF, ticks_per_second=5, consider_imitating_self=True, payoff_matrix=None,
-                 payoffs_velocity=0.5, revision_protocol=BEP, show_plot_distribution=ON):
+                 ticks_per_second=5, consider_imitating_self=True, payoff_matrix=None, payoffs_velocity=0.5,
+                 revision_protocol=BEP, show_plot_distribution=ON):
         """
         Complete matching is off since BEP does not consider it. Then the agents play his current strategy against a
         random sample of opponents. The size of this sample is specified by the parameter n-of-trials.
@@ -47,7 +45,6 @@ class AgentGame(object):
         :param number_of_trials: specifies the size of the sample of opponents to test the strategies with.
         :param use_prob_revision: defines the assignment of revision opportunities to agents. If it is on, then
             assignments are stochastic and independent.
-        :param mean_dynamics:
         :param ticks_per_second: Number of ticks per second.
         :param consider_imitating_self:
         :param payoff_matrix:
@@ -68,7 +65,6 @@ class AgentGame(object):
         self.payoff_matrix = self.__get_payoff_matrix(payoff_matrix)
         self.maximum_payoff = np.max(self.payoff_matrix)
         self.minimum_payoff = np.min(self.payoff_matrix)
-        self.mean_dynamics = mean_dynamics
         self.payoffs_velocity = payoffs_velocity
         self.revision_protocol = revision_protocol
         self.show_plot_distribution = show_plot_distribution
@@ -116,7 +112,7 @@ class AgentGame(object):
             self.payoff_matrix = np.array([[1 + (np.sin(self.payoffs_velocity * g) + 1) / 2, 0],
                                            [0, 1 + (np.cos(self.payoffs_velocity * g) + 1) / 2]])
 
-    def logging_distributions(self, g, plot_dist, ax=None):
+    def logging_distributions(self, g, plot_dist):
         distribution = self.agents.get_strategy_distribution()
         if self.show_plot_distribution == ON:
             plot_distribution(g, self.ticks_per_second, distribution, plot_dist)
@@ -136,51 +132,22 @@ class AgentGame(object):
         self.count_of_states[distribution[1]] += 1
         return self.count_of_states
 
-    def get_mean_dynamics(self):
-        count_of_states = self.get_count_of_states()
-        x = range(len(count_of_states))
-        integral_f_dx = sum(count_of_states * np.diff(range(len(count_of_states) + 1)))
-        f_bar = count_of_states / integral_f_dx
-        dx = np.diff(range(len(count_of_states) + 1))
-        expectation = sum(x * f_bar * dx)
-        return expectation
-
-    def simulate_agent_game(self):
-        """Under the best experienced payoff protocol, a revising agent tests each of the "n_of_candidates" of
-        strategies against a random agent, with each play of each strategy being against a newly drawn opponent. The
-        revising agent then selects the strategy that obtained the greater payoff in the test, with ties resolved at
-        random.
+    def run_population_game(self):
+        """Starts up the clock and runs the population game allowing some agents to review their strategies, at each
+        tick of time.
 
         :return: the distribution of strategies and a list needed to plot it.
         """
         if self.show_plot_distribution == ON:
-            plt.figure()
             length_x = self.game_rounds / self.ticks_per_second
-            if self.mean_dynamics == OFF:
-                ax = plt.axes(xlim=(0, length_x), ylim=(0, 1))
-            else:
-                ax = plt.axes()
-            plt.xlabel(SECONDS)
-            plt.ylabel(DISTRIBUTION)
-            plt.ion()
-        else:
-            ax = None
+            prepare_plot(length_x, SECONDS, DISTRIBUTION)
 
         plot_dist = []
-        mean_dynamic = []
         for g in range(self.game_rounds):
             self.tick = g
             self.update_strategies()
-            if (g % self.ticks_per_second == 0) & (self.mean_dynamics == OFF):
-                self.logging_distributions(g, plot_dist, ax)
+            if g % self.ticks_per_second == 0:
+                self.logging_distributions(g, plot_dist)
                 self.update_payoff_matrix(g / self.ticks_per_second)
-            else:
-                expectation = self.get_mean_dynamics()
-                mean_dynamic.append(expectation)
 
-        if self.mean_dynamics == OFF:
-            pass
-        else:
-            plt.plot(mean_dynamic)
-            plt.show(block=True)
         return self.agents.get_strategy_distribution(), plot_dist
