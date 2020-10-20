@@ -35,12 +35,6 @@ class Agent(object):
         player[strategy] = 1
         return player
 
-    def update_avg_payoff(self, payoff, tick):
-        """Updates the average payoff at each tick of time."""
-
-        if tick > 0:
-            self.avg_payoff = (self.avg_payoff * (tick - 1) + payoff) / tick
-
     def __get_test_strategies_for_bep(self, num_of_channels):
         strategies = list(range(num_of_channels))
         strategies.remove(self.strategy)
@@ -87,26 +81,26 @@ class Agent(object):
                                                        imitating_opponent.set_strategy(imitating_opponent.strategy))
         if payoff_revising_player + payoff_imitating_player > 0:
             change_probability = max((payoff_imitating_player - payoff_revising_player) /
-                                     (payoff_revising_player + payoff_imitating_player), 0)
+                                     (game.maximum_payoff - game.minimum_payoff), 0)
             if random.random() < change_probability:
                 self.strategy = imitating_player.strategy
 
     def update_strategy_under_linear_dissatisfaction_protocol(self, game):
-        """Under linear-dissatisfaction, the agent switches to the alternative strategy with probability proportional
-        to the difference between the maximum possible payoff in the game and the revising agent’s average payoff (
-        under linear- dissatisfaction), or between the alternative strategy’s average payoff and the minimum possible
-        payoff in the game (under linear-attraction).
+        """Under linear-dissatisfaction, the agent plays with 'number_of_trials' opponents randomly chosen. Then, she
+        imitates a different random agent -imitating_player- with a probability which is proportional to the difference
+        between the maximum payoff and the average obtained in these trials.
 
         :param game: an instance of the current game.
         """
-        player_2 = game.agents.get_player(self)
-        payoff = game.play_agent_game(self.set_strategy(self.strategy), player_2.set_strategy(player_2.strategy))
-        self.update_avg_payoff(payoff, game.tick)
-        probability_of_change = (game.maximun_payoff - self.avg_payoff) / (game.maximun_payoff + self.avg_payoff)
+        payoffs = []
+        for trial in range(game.number_of_trials):
+            current_opponent = game.agents.get_player(self)
+            payoffs.append(game.play_agent_game(self.set_strategy(self.strategy),
+                                                current_opponent.set_strategy(current_opponent.strategy)))
+        probability_of_change = (game.maximum_payoff - np.mean(payoffs)) / (game.maximum_payoff - game.minimum_payoff)
         if random.random() < probability_of_change:
-            strategies = list(range(game.payoff_matrix.shape[0]))
-            strategies.remove(self.strategy)
-            self.strategy = np.random.choice(strategies)
+            imitating_player = game.agents.get_player(self)
+            self.strategy = imitating_player.strategy
 
     def update_strategy(self, game):
         """Updates the strategy following the specified protocol.

@@ -1,6 +1,5 @@
 import random
 import numpy as np
-import pandas as pd
 import scipy.special
 
 from matplotlib import pyplot as plt
@@ -25,7 +24,7 @@ class AgentGame(object):
     """
 
     def __init__(self, game_rounds, num_of_channels, n_of_agents, n_of_candidates, random_initial_condition,
-                 prob_revision=0.001, n_of_revisions_per_tick=10, n_of_trials=10, use_prob_revision=ON,
+                 prob_revision=0.001, n_of_revisions_per_tick=10, number_of_trials=10, use_prob_revision=ON,
                  mean_dynamics=OFF, ticks_per_second=5, consider_imitating_self=True, payoff_matrix=None,
                  payoffs_velocity=0.5, revision_protocol=BEP, show_plot_distribution=ON):
         """
@@ -45,7 +44,7 @@ class AgentGame(object):
         :param prob_revision: defines the probability that an agent is assigned an opportunity of revision.
         :param n_of_revisions_per_tick: if use_prob_revision is off, this parameter defines the number of revising
             agents.
-        :param n_of_trials: specifies the size of the sample of opponents to test the strategies with.
+        :param number_of_trials: specifies the size of the sample of opponents to test the strategies with.
         :param use_prob_revision: defines the assignment of revision opportunities to agents. If it is on, then
             assignments are stochastic and independent.
         :param mean_dynamics:
@@ -63,11 +62,12 @@ class AgentGame(object):
         self.random_initial_condition = random_initial_condition
         self.prob_revision = prob_revision
         self.n_of_revisions_per_tick = n_of_revisions_per_tick
-        self.n_of_trials = n_of_trials
+        self.number_of_trials = number_of_trials
         self.use_prob_revision = use_prob_revision
         self.consider_imitating_self = consider_imitating_self
         self.payoff_matrix = self.__get_payoff_matrix(payoff_matrix)
-        self.maximun_payoff = np.max(self.payoff_matrix)
+        self.maximum_payoff = np.max(self.payoff_matrix)
+        self.minimum_payoff = np.min(self.payoff_matrix)
         self.mean_dynamics = mean_dynamics
         self.payoffs_velocity = payoffs_velocity
         self.revision_protocol = revision_protocol

@@ -7,7 +7,6 @@ game theory frame.
 ### Agent.
 The agents are the minimal units interacting in the simulation. They can:
 - set_strategy
-- update_avg_payoff
 - update_strategy
 
 ### Game.
