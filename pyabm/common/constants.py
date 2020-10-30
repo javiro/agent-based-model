@@ -2,7 +2,7 @@
 # AGENT
 ########################################################################################################################
 BEP = "bep"
-PAIRWISE_DIFFERENCE = "pairwise_difference"
+PAIRWISE_DIFFERENCE = "pairwise-difference"
 LINEAR_DISSATISFACTION = "linear-dissatisfaction"
 LINEAR_ATTRACTION = "linear-attraction"
 
@@ -43,3 +43,10 @@ MEAN_DYNAMICS = "mean_dynamics"
 PAYOFFS_VELOCITY_OF_CHANGE = "payoffs_velocity_of_change"
 MATRIX_PAYOFFS = "matrix_payoffs"
 SHOW_PLOT_DISTRIBUTION = "show_plot_distribution"
+REVISION_PROTOCOL = "revision_protocol"
+NUMBER_OF_SIMULATIONS = "number_of_simulations"
+
+########################################################################################################################
+# EXCEPTIONS
+########################################################################################################################
+NOT_VALID_PROTOCOL = "The protocol {} is not valid. It must be one of: {}."
