@@ -19,6 +19,7 @@ def play_population_game(show_plot_distribution=None):
     payoffs_velocity = conf.get_payoffs_velocity_of_change()
     coordination = conf.get_matrix_payoffs()
     revision_protocol = conf.get_revision_protocol()
+    dynamic_payoff_matrix = conf.get_dynamic_payoff_matrix()
     if not show_plot_distribution:
         show_plot_distribution = conf.get_show_plot_distribution()
     g = AgentGame(game_rounds,
@@ -35,7 +36,8 @@ def play_population_game(show_plot_distribution=None):
                   payoff_matrix=coordination,
                   payoffs_velocity=payoffs_velocity,
                   revision_protocol=revision_protocol,
-                  show_plot_distribution=show_plot_distribution)
+                  show_plot_distribution=show_plot_distribution,
+                  dynamic_payoff_matrix=dynamic_payoff_matrix)
 
     print("The initial distribution is: {}".format(g.agents.get_strategy_distribution()))
     _, distribution_evolution = g.run_population_game()

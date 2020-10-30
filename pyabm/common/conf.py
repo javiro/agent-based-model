@@ -135,3 +135,11 @@ class Conf:
         :return: the number of simulations.
         """
         return self.conf[NUMBER_OF_SIMULATIONS]
+
+    @handle_config_parser_exception("Configuration error: ")
+    def get_dynamic_payoff_matrix(self):
+        """Returns true if we want the payoff matrix to change in time.
+
+        :return: the dynamic payoff matrix.
+        """
+        return self.conf[DYNAMIC_PAYOFF_MATRIX]
