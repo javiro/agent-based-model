@@ -93,14 +93,6 @@ class Conf:
         return self.conf[CONSIDER_IMITATING_SELF]
 
     @handle_config_parser_exception("Configuration error: ")
-    def get_mean_dynamics(self):
-        """Returns true in case of mean dynamics is switched on.
-
-        :return: the consideration of imitating self.
-        """
-        return self.conf[MEAN_DYNAMICS]
-
-    @handle_config_parser_exception("Configuration error: ")
     def get_payoffs_velocity_of_change(self):
         """Returns the velocity of change of the payoffs.
 
@@ -135,3 +127,11 @@ class Conf:
         if revision_protocol not in allowed_protocols:
             raise PyABMException(NOT_VALID_PROTOCOL.format(revision_protocol, allowed_protocols))
         return revision_protocol
+
+    @handle_config_parser_exception("Configuration error: ")
+    def get_number_of_simulations(self):
+        """Returns the number of simulations to carry on.
+
+        :return: the number of simulations.
+        """
+        return self.conf[NUMBER_OF_SIMULATIONS]

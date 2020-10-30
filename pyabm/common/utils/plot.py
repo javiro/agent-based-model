@@ -4,6 +4,14 @@ from matplotlib import pyplot as plt
 from pyabm.common.constants import B, G, R, C, M, Y, K
 
 
+def prepare_plot(length_x, xlabel, ylabel):
+    plt.figure()
+    plt.axes(xlim=(0, length_x), ylim=(0, 1))
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.ion()
+
+
 def plot_distribution(g, ticks_per_second, distribution, plot_dist):
     plot_dist.append(distribution[::-1] / sum(distribution))
     df_plot_dist = pd.DataFrame(plot_dist)
