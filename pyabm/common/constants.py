@@ -46,6 +46,7 @@ SHOW_PLOT_DISTRIBUTION = "show_plot_distribution"
 REVISION_PROTOCOL = "revision_protocol"
 NUMBER_OF_SIMULATIONS = "number_of_simulations"
 DYNAMIC_PAYOFF_MATRIX = "dynamic_payoff_matrix"
+NUMBER_OF_STEPS_TO_CHANGE_MATRIX = "number_of_steps_to_change_matrix"
 
 ########################################################################################################################
 # EXCEPTIONS
