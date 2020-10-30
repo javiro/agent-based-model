@@ -2,7 +2,7 @@
 # AGENT
 ########################################################################################################################
 BEP = "bep"
-PAIRWISE_DIFFERENCE = "pairwise_difference"
+PAIRWISE_DIFFERENCE = "pairwise-difference"
 LINEAR_DISSATISFACTION = "linear-dissatisfaction"
 LINEAR_ATTRACTION = "linear-attraction"
 

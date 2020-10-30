@@ -55,7 +55,7 @@ class Agent(object):
         for strategy in n_of_candidates:
             trials = []
             self.strategy = strategy
-            for trial in range(game.n_of_trials):
+            for trial in range(game.number_of_trials):
                 player_2 = game.agents.get_player(self)
                 trials.append(game.play_agent_game(self.set_strategy(strategy),
                                                    player_2.set_strategy(player_2.strategy)))
@@ -79,11 +79,10 @@ class Agent(object):
         imitating_opponent = game.agents.get_player(imitating_player)
         payoff_imitating_player = game.play_agent_game(imitating_player.set_strategy(imitating_player.strategy),
                                                        imitating_opponent.set_strategy(imitating_opponent.strategy))
-        if payoff_revising_player + payoff_imitating_player > 0:
-            change_probability = max((payoff_imitating_player - payoff_revising_player) /
-                                     (game.maximum_payoff - game.minimum_payoff), 0)
-            if random.random() < change_probability:
-                self.strategy = imitating_player.strategy
+        change_probability = (payoff_imitating_player - payoff_revising_player) /\
+                             (game.maximum_payoff - game.minimum_payoff)
+        if random.random() < change_probability:
+            self.strategy = imitating_player.strategy
 
     def update_strategy_under_linear_dissatisfaction_protocol(self, game):
         """Under linear-dissatisfaction, the agent plays with 'number_of_trials' opponents randomly chosen. Then, she
