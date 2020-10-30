@@ -3,6 +3,8 @@
     "ticks_per_second": 5,
     "number_of_channels": 2,
     "number_of_agents": 200,
+    "dynamic_payoff_matrix": false,
+    "number_of_steps_to_change_matrix": 100,
     "initial_distribution_of_strategies": [120, 80],
     "probability_revision": 0.2,
     "number_of_revisions_per_tick": 10,
@@ -12,6 +14,6 @@
     "payoffs_velocity_of_change": 0.0,
 	"matrix_payoffs": [[1, 0], [0, 2]],
     "show_plot_distribution": "ON",
-    "revision_protocol": "bep",
+    "revision_protocol": "linear-dissatisfaction",
     "number_of_simulations": 10
 }

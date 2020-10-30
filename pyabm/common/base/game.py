@@ -24,7 +24,8 @@ class AgentGame(object):
     def __init__(self, game_rounds, num_of_channels, n_of_agents, n_of_candidates, random_initial_condition,
                  prob_revision=0.001, n_of_revisions_per_tick=10, number_of_trials=10, use_prob_revision=ON,
                  ticks_per_second=5, consider_imitating_self=True, payoff_matrix=None, payoffs_velocity=0.5,
-                 revision_protocol=BEP, show_plot_distribution=ON):
+                 revision_protocol=BEP, show_plot_distribution=ON, dynamic_payoff_matrix=False,
+                 number_of_steps_to_change_matrix=100):
         """
         Complete matching is off since BEP does not consider it. Then the agents play his current strategy against a
         random sample of opponents. The size of this sample is specified by the parameter n-of-trials.
@@ -50,6 +51,8 @@ class AgentGame(object):
         :param payoff_matrix:
         :param payoffs_velocity:
         :param revision_protocol:
+        :param dynamic_payoff_matrix:
+        :param number_of_steps_to_change_matrix:
         """
         self.game_rounds = game_rounds
         self.tick = None
@@ -68,6 +71,8 @@ class AgentGame(object):
         self.payoffs_velocity = payoffs_velocity
         self.revision_protocol = revision_protocol
         self.show_plot_distribution = show_plot_distribution
+        self.dynamic_payoff_matrix = dynamic_payoff_matrix
+        self.number_of_steps_to_change_matrix = number_of_steps_to_change_matrix
         self.agents = AgentPopulation(self.n_of_agents,
                                       self.num_of_channels,
                                       self.revision_protocol,
@@ -109,8 +114,10 @@ class AgentGame(object):
 
     def update_payoff_matrix(self, g):
         if self.payoff_matrix.shape[0] == 2:
-            self.payoff_matrix = np.array([[1 + (np.sin(self.payoffs_velocity * g) + 1) / 2, 0],
-                                           [0, 1 + (np.cos(self.payoffs_velocity * g) + 1) / 2]])
+            if (g != 0) & (g % self.number_of_steps_to_change_matrix == 0):
+                np.fill_diagonal(self.payoff_matrix,
+                                 np.array(range(1, self.num_of_channels + 1))[self.payoff_matrix.diagonal() %
+                                                                              self.num_of_channels])
 
     def logging_distributions(self, g, plot_dist):
         distribution = self.agents.get_strategy_distribution()
@@ -148,6 +155,7 @@ class AgentGame(object):
             self.update_strategies()
             if g % self.ticks_per_second == 0:
                 self.logging_distributions(g, plot_dist)
-                self.update_payoff_matrix(g / self.ticks_per_second)
+                if self.dynamic_payoff_matrix:
+                    self.update_payoff_matrix(g)
 
         return self.agents.get_strategy_distribution(), plot_dist
