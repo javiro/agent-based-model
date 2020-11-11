@@ -12,32 +12,20 @@ def play_population_game(show_plot_distribution=None):
     n_of_candidates = conf.get_number_of_channels()
     random_initial_condition = conf.get_initial_distribution_of_strategies()
     prob_revision = conf.get_probability_of_revision()
-    n_of_revisions_per_tick = conf.get_number_of_revisions_per_tick()
     number_of_trials = conf.get_number_of_trials()
     use_prob_revision = conf.get_use_probability_of_revision()
-    consider_imitating_self = conf.get_consider_imitating_self()
-    payoffs_velocity = conf.get_payoffs_velocity_of_change()
     coordination = conf.get_matrix_payoffs()
     revision_protocol = conf.get_revision_protocol()
     dynamic_payoff_matrix = conf.get_dynamic_payoff_matrix()
+    asynch_random_independent = conf.get_asynch_random_independent()
+    number_of_steps_to_change_matrix = conf.get_number_of_steps_to_change_matrix()
     if not show_plot_distribution:
         show_plot_distribution = conf.get_show_plot_distribution()
-    g = AgentGame(game_rounds,
-                  num_of_channels,
-                  n_of_agents,
-                  n_of_candidates,
-                  random_initial_condition,
-                  prob_revision,
-                  n_of_revisions_per_tick,
-                  number_of_trials,
-                  use_prob_revision,
-                  ticks_per_second,
-                  consider_imitating_self,
-                  payoff_matrix=coordination,
-                  payoffs_velocity=payoffs_velocity,
-                  revision_protocol=revision_protocol,
-                  show_plot_distribution=show_plot_distribution,
-                  dynamic_payoff_matrix=dynamic_payoff_matrix)
+    g = AgentGame(game_rounds, num_of_channels, n_of_agents, n_of_candidates, random_initial_condition, prob_revision,
+                  number_of_trials, use_prob_revision, ticks_per_second, payoff_matrix=coordination,
+                  revision_protocol=revision_protocol, show_plot_distribution=show_plot_distribution,
+                  dynamic_payoff_matrix=dynamic_payoff_matrix, asynch_random_independent=asynch_random_independent,
+                  number_of_steps_to_change_matrix=number_of_steps_to_change_matrix)
 
     print("The initial distribution is: {}".format(g.agents.get_strategy_distribution()))
     _, distribution_evolution = g.run_population_game()

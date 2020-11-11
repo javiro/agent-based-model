@@ -15,15 +15,13 @@ class AgentPopulation(object):
         (iv) the protocol according to which agents revise their strategies when opportunities to do so arise.
     """
 
-    def __init__(self, n_of_agents, num_of_channels, revision_protocol, random_initial_condition='ON',
-                 consider_imitating_self=True):
+    def __init__(self, n_of_agents, num_of_channels, revision_protocol, random_initial_condition='ON',):
         """
 
         :param n_of_agents:
         :param num_of_channels:
         :param revision_protocol:
         :param random_initial_condition:
-        :param consider_imitating_self:
         """
         self.n_of_agents = n_of_agents
         self.num_of_channels = num_of_channels
@@ -31,7 +29,6 @@ class AgentPopulation(object):
         self.random_initial_condition = random_initial_condition
         self.initial_condition = self.__get_initial_condition(random_initial_condition)
         self.population = self.__populate_group()
-        self.consider_imitating_self = consider_imitating_self
         print(self.revision_protocol)
 
     def __get_initial_condition(self, random_initial_condition):
@@ -62,12 +59,9 @@ class AgentPopulation(object):
         :return:
         """
         player_2 = self.population[random.randint(0, len(self.population) - 1)]
-        if self.consider_imitating_self:
-            return player_2
-        else:
-            while player_2 == player_1:
-                player_2 = self.population[random.randint(0, len(self.population) - 1)]
-            return player_2
+        while player_2 == player_1:
+            player_2 = self.population[random.randint(0, len(self.population) - 1)]
+        return player_2
 
     def get_strategy_distribution(self):
         strategies = [player.strategy for player in self.population]
