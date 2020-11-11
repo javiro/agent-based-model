@@ -22,10 +22,9 @@ class AgentGame(object):
     """
 
     def __init__(self, game_rounds, num_of_channels, n_of_agents, n_of_candidates, random_initial_condition,
-                 prob_revision=0.001, n_of_revisions_per_tick=10, number_of_trials=10, use_prob_revision=ON,
-                 ticks_per_second=5, consider_imitating_self=True, payoff_matrix=None, payoffs_velocity=0.5,
+                 prob_revision=0.001, number_of_trials=10, use_prob_revision=ON, ticks_per_second=5, payoff_matrix=None,
                  revision_protocol=BEP, show_plot_distribution=ON, dynamic_payoff_matrix=False,
-                 number_of_steps_to_change_matrix=100):
+                 number_of_steps_to_change_matrix=100, asynch_random_independent=True):
         """
         Complete matching is off since BEP does not consider it. Then the agents play his current strategy against a
         random sample of opponents. The size of this sample is specified by the parameter n-of-trials.
@@ -41,15 +40,11 @@ class AgentGame(object):
         :param n_of_candidates: determines the total number of strategies the revising agent considers. The revising
             agent’s current strategy is always part of the set of candidates.
         :param prob_revision: defines the probability that an agent is assigned an opportunity of revision.
-        :param n_of_revisions_per_tick: if use_prob_revision is off, this parameter defines the number of revising
-            agents.
         :param number_of_trials: specifies the size of the sample of opponents to test the strategies with.
         :param use_prob_revision: defines the assignment of revision opportunities to agents. If it is on, then
             assignments are stochastic and independent.
         :param ticks_per_second: Number of ticks per second.
-        :param consider_imitating_self:
         :param payoff_matrix:
-        :param payoffs_velocity:
         :param revision_protocol:
         :param dynamic_payoff_matrix:
         :param number_of_steps_to_change_matrix:
@@ -61,23 +56,20 @@ class AgentGame(object):
         self.n_of_candidates = n_of_candidates
         self.random_initial_condition = random_initial_condition
         self.prob_revision = prob_revision
-        self.n_of_revisions_per_tick = n_of_revisions_per_tick
         self.number_of_trials = number_of_trials
         self.use_prob_revision = use_prob_revision
-        self.consider_imitating_self = consider_imitating_self
         self.payoff_matrix = self.__get_payoff_matrix(payoff_matrix)
         self.maximum_payoff = np.max(self.payoff_matrix)
         self.minimum_payoff = np.min(self.payoff_matrix)
-        self.payoffs_velocity = payoffs_velocity
         self.revision_protocol = revision_protocol
         self.show_plot_distribution = show_plot_distribution
         self.dynamic_payoff_matrix = dynamic_payoff_matrix
         self.number_of_steps_to_change_matrix = number_of_steps_to_change_matrix
+        self.asynch_random_independent = asynch_random_independent
         self.agents = AgentPopulation(self.n_of_agents,
                                       self.num_of_channels,
                                       self.revision_protocol,
-                                      self.random_initial_condition,
-                                      self.consider_imitating_self)
+                                      self.random_initial_condition)
         self.ticks_per_second = ticks_per_second
         self.count_of_states = self.__get_initial_count_of_states()
 
@@ -108,9 +100,14 @@ class AgentGame(object):
                 if random.random() < self.prob_revision:
                     player_1.update_strategy(self)
         else:
-            revising_population = random.sample(self.agents.population, self.n_of_revisions_per_tick)
-            for player_1 in revising_population:
-                player_1.update_strategy(self)
+            if self.asynch_random_independent:
+                for i in range(self.n_of_agents):
+                    player_1 = self.agents.population[random.randint(0, self.n_of_agents - 1)]
+                    player_1.update_strategy(self)
+            else:
+                revising_population = random.sample(self.agents.population, self.agents.population)
+                for player_1 in revising_population:
+                    player_1.update_strategy(self)
 
     def update_payoff_matrix(self, g):
         if self.payoff_matrix.shape[0] == 2:
@@ -125,8 +122,12 @@ class AgentGame(object):
             plot_distribution(g, self.ticks_per_second, distribution, plot_dist)
         else:
             plot_dist.append(distribution[-1] / self.n_of_agents)
-        print("Percentage of strategy 2 at time {}: {}"
-              .format(g / self.ticks_per_second, distribution[-1] / self.n_of_agents))
+        # if self.num_of_channels < 3:
+        #     print("Percentage of strategy 2 at time {}: {}"
+        #           .format(g / self.ticks_per_second, distribution[-1] / self.n_of_agents))
+        # else:
+        #     print("Distribution of strategies at time {}: {}"
+        #           .format(g / self.ticks_per_second, distribution / self.n_of_agents))
 
     def __get_initial_count_of_states(self):
         num_of_states = int(scipy.special.binom(self.n_of_agents + self.num_of_channels - 1, self.num_of_channels - 1))

@@ -35,10 +35,8 @@ NUMBER_OF_CHANNELS = "number_of_channels"
 NUMBER_OF_AGENTS = "number_of_agents"
 INITIAL_DISTRIBUTION_OF_STRATEGIES = "initial_distribution_of_strategies"
 PROBABILITY_OF_REVISION = "probability_revision"
-NUMBER_OF_REVISIONS_PER_TICK = "number_of_revisions_per_tick"
 NUMBER_OF_TRIALS = "number_of_trials"
 USE_PROBABILITY_OF_REVISION = "use_probability_of_revision"
-CONSIDER_IMITATING_SELF = "consider_imitating_self"
 MEAN_DYNAMICS = "mean_dynamics"
 PAYOFFS_VELOCITY_OF_CHANGE = "payoffs_velocity_of_change"
 MATRIX_PAYOFFS = "matrix_payoffs"
@@ -47,6 +45,7 @@ REVISION_PROTOCOL = "revision_protocol"
 NUMBER_OF_SIMULATIONS = "number_of_simulations"
 DYNAMIC_PAYOFF_MATRIX = "dynamic_payoff_matrix"
 NUMBER_OF_STEPS_TO_CHANGE_MATRIX = "number_of_steps_to_change_matrix"
+ASYNCH_RANDOM_INDEPENDENT = "asynch_random_independent"
 
 ########################################################################################################################
 # EXCEPTIONS

@@ -61,14 +61,6 @@ class Conf:
         return self.conf[PROBABILITY_OF_REVISION]
 
     @handle_config_parser_exception("Configuration error: ")
-    def get_number_of_revisions_per_tick(self):
-        """Returns the number of revisions per tick.
-
-        :return: the number of revisions per tick.
-        """
-        return self.conf[NUMBER_OF_REVISIONS_PER_TICK]
-
-    @handle_config_parser_exception("Configuration error: ")
     def get_number_of_trials(self):
         """Returns the number of trials.
 
@@ -85,20 +77,12 @@ class Conf:
         return self.conf[USE_PROBABILITY_OF_REVISION]
 
     @handle_config_parser_exception("Configuration error: ")
-    def get_consider_imitating_self(self):
-        """Returns true in case of considering imitating self.
+    def get_asynch_random_independent(self):
+        """Returns true in case of considering asynchronous updating strategy of random independent agent.
 
-        :return: the consideration of imitating self.
+        :return: the consideration of asynchronous updating strategy of random independent agent.
         """
-        return self.conf[CONSIDER_IMITATING_SELF]
-
-    @handle_config_parser_exception("Configuration error: ")
-    def get_payoffs_velocity_of_change(self):
-        """Returns the velocity of change of the payoffs.
-
-        :return: the velocity of change of the payoffs.
-        """
-        return self.conf[PAYOFFS_VELOCITY_OF_CHANGE]
+        return self.conf[ASYNCH_RANDOM_INDEPENDENT]
 
     @handle_config_parser_exception("Configuration error: ")
     def get_matrix_payoffs(self):
