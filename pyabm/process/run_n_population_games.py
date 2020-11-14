@@ -1,8 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from multiprocessing import Pool
-
 from pyabm.common.conf import Conf
 from pyabm.common.constants import OFF
 from pyabm.process.run_population_game import play_population_game
@@ -14,9 +12,6 @@ def play_n_population_game():
     conf = Conf(configuration_path)
     number_of_simulations = conf.get_number_of_simulations()
     distributions = []
-
-    # pool = Pool()  # Create a multiprocessing Pool
-    # pool.map(process_image, data_inputs)
 
     for run_number in range(number_of_simulations):
         distribution = play_population_game(show_plot_distribution=OFF)

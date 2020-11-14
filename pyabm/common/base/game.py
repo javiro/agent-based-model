@@ -70,7 +70,7 @@ class AgentGame(object):
 
     def __get_payoff_matrix(self, payoff_matrix):
         n = self.num_of_channels
-        if payoff_matrix is None:
+        if not payoff_matrix:
             payoff_matrix = np.zeros((n, n))
             for i in range(n):
                 payoff_matrix[i, i] = i + 1

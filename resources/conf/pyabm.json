@@ -9,7 +9,7 @@
     "number_of_trials": 1,
     "update_strategies_mode": "all_in_one_tick",
     "payoffs_velocity_of_change": 0.0,
-	"matrix_payoffs": [[1, 0, 0, 0, 0], [0, 2, 0, 0, 0], [0, 0, 3, 0, 0], [0, 0, 0, 4, 0], [0, 0, 0, 0, 5]],
+	"matrix_payoffs": [],
     "show_plot_distribution": "OFF",
     "revision_protocol": "bep",
     "number_of_simulations": 1,
