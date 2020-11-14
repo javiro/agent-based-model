@@ -37,8 +37,8 @@ class Agent(object):
 
     def __get_test_strategies_for_bep(self, num_of_channels):
         strategies = list(range(num_of_channels))
-        strategies.remove(self.strategy)
-        strategies.insert(0, self.strategy)
+        # strategies.remove(self.strategy)
+        # strategies.insert(0, self.strategy)
         return strategies
 
     def update_strategy_under_bep_protocol(self, game):

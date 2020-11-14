@@ -52,8 +52,7 @@ class AgentPopulation(object):
         return population
 
     def get_player(self, player_1):
-        """Returns a random opponent avoiding the play of an agent with himself if consider_imitating_self is set to
-        false.
+        """Returns a random opponent avoiding the play of an agent with himself.
 
         :param player_1:
         :return:
