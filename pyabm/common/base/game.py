@@ -22,7 +22,7 @@ class AgentGame(object):
     """
 
     def __init__(self, game_rounds, num_of_channels, n_of_agents, n_of_candidates, random_initial_condition,
-                 update_strategies_mode, number_of_trials=10, ticks_per_second=5, payoff_matrix=None,
+                 update_strategies_mode, noise, number_of_trials=10, ticks_per_second=5, payoff_matrix=None,
                  revision_protocol=BEP, show_plot_distribution=ON, dynamic_payoff_matrix=False,
                  number_of_steps_to_change_matrix=100):
         """
@@ -40,6 +40,7 @@ class AgentGame(object):
         :param n_of_candidates: determines the total number of strategies the revising agent considers. The revising
             agent’s current strategy is always part of the set of candidates.
         :param update_strategies_mode:
+        :param noise:
         :param number_of_trials: specifies the size of the sample of opponents to test the strategies with.
         :param ticks_per_second: Number of ticks per second.
         :param payoff_matrix:
@@ -62,6 +63,7 @@ class AgentGame(object):
         self.show_plot_distribution = show_plot_distribution
         self.dynamic_payoff_matrix = dynamic_payoff_matrix
         self.number_of_steps_to_change_matrix = number_of_steps_to_change_matrix
+        self.noise = noise
         self.agents = AgentPopulation(self.n_of_agents,
                                       self.num_of_channels,
                                       self.revision_protocol,

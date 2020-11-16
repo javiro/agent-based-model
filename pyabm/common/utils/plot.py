@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from matplotlib import pyplot as plt
 
 from pyabm.common.constants import B, G, R, C, M, Y, K
@@ -25,18 +26,43 @@ def plot_distribution(g, ticks_per_second, distribution, plot_dist):
     plt.pause(0.0001)
 
 
-def write_results_to_csv(run_number, number_of_game_rounds, distribution, number_of_simulations, revision_protocol,
-                         update_strategies_mode, number_of_agents, number_of_channels):
+def write_partial_results_to_csv(run_number, number_of_game_rounds, distribution, number_of_simulations, revision_protocol,
+                                 update_strategies_mode, number_of_agents, number_of_channels, noise):
     pd_runs = pd.DataFrame({"run_number": run_number,
                             "step": list(range(number_of_game_rounds + 1)),
                             "strategy_ratio": distribution})
-    pd_runs.to_csv("python_{}_{}_strategies_{}_runs_{}_{}_agents.csv"
+    pd_runs.to_csv("python_{}_{}_strategies_{}_runs_{}_{}_agents_noise_{}.csv"
                    .format(revision_protocol,
                            number_of_channels,
                            number_of_simulations,
                            update_strategies_mode,
-                           number_of_agents),
+                           number_of_agents,
+                           noise),
                    header=True if run_number == 0 else False,
                    mode="w" if run_number == 0 else "a",
+                   sep="|",
+                   index=False)
+
+
+def write_result_to_csv(number_of_game_rounds, distributions, number_of_simulations, revision_protocol,
+                        update_strategies_mode, number_of_agents, number_of_channels, noise):
+    run_numbers = [[run_number for game_round in range(number_of_game_rounds + 1)]
+                   for run_number in range(number_of_simulations)]
+    step = [list(range(number_of_game_rounds + 1)) for run_number in range(number_of_simulations)]
+
+    print(np.array(run_numbers).shape)
+    print(np.array(step).shape)
+    print(np.array(distributions).shape)
+    pd_runs = pd.DataFrame({"run_number": np.array(run_numbers).reshape(1, -1)[0],
+                            "step": np.array(step).reshape(1, -1)[0],
+                            "strategy_ratio": np.array(distributions).reshape(1, -1)[0]})
+    pd_runs.to_csv("python_{}_{}_strategies_{}_runs_{}_{}_agents_noise_{}.csv"
+                   .format(revision_protocol,
+                           number_of_channels,
+                           number_of_simulations,
+                           update_strategies_mode,
+                           number_of_agents,
+                           noise),
+                   header=True,
                    sep="|",
                    index=False)

@@ -127,3 +127,19 @@ class Conf:
         :return: True if write results to csv is required and False otherwise.
         """
         return self.conf[WRITE_RESULTS_TO_CSV]
+
+    @handle_config_parser_exception("Configuration error: ")
+    def get_noise(self):
+        """Returns the noise which will be considered in the simulation.
+
+        :return: the noise.
+        """
+        return self.conf[NOISE]
+
+    @handle_config_parser_exception("Configuration error: ")
+    def get_number_of_processors(self):
+        """Returns the number of processors.
+
+        :return: the number of processors.
+        """
+        return self.conf[NUMBER_OF_PROCESSORS]

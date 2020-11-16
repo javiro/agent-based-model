@@ -106,9 +106,12 @@ class Agent(object):
 
         :param game: an instance of the current game.
         """
-        if self.revision_protocol == BEP:
-            self.update_strategy_under_bep_protocol(game)
-        elif self.revision_protocol == PAIRWISE_DIFFERENCE:
-            self.update_strategy_under_pairwise_difference_protocol(game)
-        elif self.revision_protocol == LINEAR_DISSATISFACTION:
-            self.update_strategy_under_linear_dissatisfaction_protocol(game)
+        if random.random() > game.noise:
+            if self.revision_protocol == BEP:
+                self.update_strategy_under_bep_protocol(game)
+            elif self.revision_protocol == PAIRWISE_DIFFERENCE:
+                self.update_strategy_under_pairwise_difference_protocol(game)
+            elif self.revision_protocol == LINEAR_DISSATISFACTION:
+                self.update_strategy_under_linear_dissatisfaction_protocol(game)
+        else:
+            self.strategy = random.randint(0, game.num_of_channels - 1)

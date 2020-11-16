@@ -47,6 +47,8 @@ NUMBER_OF_STEPS_TO_CHANGE_MATRIX = "number_of_steps_to_change_matrix"
 ASYNCHRONOUS_RANDOM_INDEPENDENT = "asynchronous_random_independent"
 ALL_IN_ONE_TICK = "all_in_one_tick"
 UPDATE_STRATEGIES_MODE = "update_strategies_mode"
+NOISE = "noise"
+NUMBER_OF_PROCESSORS = "number_of_processors"
 
 ########################################################################################################################
 # EXCEPTIONS

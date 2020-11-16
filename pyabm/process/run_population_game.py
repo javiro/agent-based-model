@@ -17,10 +17,11 @@ def play_population_game(show_plot_distribution=None):
     revision_protocol = conf.get_revision_protocol()
     dynamic_payoff_matrix = conf.get_dynamic_payoff_matrix()
     number_of_steps_to_change_matrix = conf.get_number_of_steps_to_change_matrix()
+    noise = conf.get_noise()
     if not show_plot_distribution:
         show_plot_distribution = conf.get_show_plot_distribution()
     g = AgentGame(game_rounds, num_of_channels, n_of_agents, n_of_candidates, random_initial_condition,
-                  update_strategies_mode, number_of_trials, ticks_per_second, payoff_matrix=coordination,
+                  update_strategies_mode, noise, number_of_trials, ticks_per_second, payoff_matrix=coordination,
                   revision_protocol=revision_protocol, show_plot_distribution=show_plot_distribution,
                   dynamic_payoff_matrix=dynamic_payoff_matrix,
                   number_of_steps_to_change_matrix=number_of_steps_to_change_matrix)
