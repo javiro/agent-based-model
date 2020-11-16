@@ -53,12 +53,12 @@ class Conf:
         return self.conf[INITIAL_DISTRIBUTION_OF_STRATEGIES]
 
     @handle_config_parser_exception("Configuration error: ")
-    def get_probability_of_revision(self):
-        """Returns the probability of revision.
+    def get_update_strategies_mode(self):
+        """Returns update strategies mode: asynchronous_random_independent or all_in_one_tick.
 
-        :return: the probability of revision.
+        :return: the update strategies mode.
         """
-        return self.conf[PROBABILITY_OF_REVISION]
+        return self.conf[UPDATE_STRATEGIES_MODE]
 
     @handle_config_parser_exception("Configuration error: ")
     def get_number_of_trials(self):
@@ -67,22 +67,6 @@ class Conf:
         :return: the number of trials.
         """
         return self.conf[NUMBER_OF_TRIALS]
-
-    @handle_config_parser_exception("Configuration error: ")
-    def get_use_probability_of_revision(self):
-        """Returns true in case the use of probability of revision is selected.
-
-        :return: the use of probability of revision.
-        """
-        return self.conf[USE_PROBABILITY_OF_REVISION]
-
-    @handle_config_parser_exception("Configuration error: ")
-    def get_asynch_random_independent(self):
-        """Returns true in case of considering asynchronous updating strategy of random independent agent.
-
-        :return: the consideration of asynchronous updating strategy of random independent agent.
-        """
-        return self.conf[ASYNCH_RANDOM_INDEPENDENT]
 
     @handle_config_parser_exception("Configuration error: ")
     def get_matrix_payoffs(self):
@@ -135,3 +119,27 @@ class Conf:
         :return: the number of steps to change matrix.
         """
         return self.conf[NUMBER_OF_STEPS_TO_CHANGE_MATRIX]
+
+    @handle_config_parser_exception("Configuration error: ")
+    def get_write_results_to_csv(self):
+        """Returns True if write results to csv is required and False otherwise.
+
+        :return: True if write results to csv is required and False otherwise.
+        """
+        return self.conf[WRITE_RESULTS_TO_CSV]
+
+    @handle_config_parser_exception("Configuration error: ")
+    def get_noise(self):
+        """Returns the noise which will be considered in the simulation.
+
+        :return: the noise.
+        """
+        return self.conf[NOISE]
+
+    @handle_config_parser_exception("Configuration error: ")
+    def get_number_of_processors(self):
+        """Returns the number of processors.
+
+        :return: the number of processors.
+        """
+        return self.conf[NUMBER_OF_PROCESSORS]

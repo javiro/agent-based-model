@@ -3,9 +3,9 @@ import sys
 
 
 def handle_config_parser_exception(message):
-    """Decorator for logging errors accessing configuration parameters
+    """Decorator for logging errors accessing configuration parameters.
 
-    :param message: beginning of the logging message
+    :param message: beginning of the logging message.
     """
     logger = logging.getLogger()
 

@@ -1,4 +1,3 @@
-from datetime import datetime
 from os import path
 
 from pyabm.common.conf import Conf
