@@ -56,7 +56,7 @@ class Agent(object):
             trials = []
             self.strategy = strategy
             for trial in range(game.number_of_trials):
-                player_2 = game.agents.get_player(self)
+                player_2 = game.agents.get_opponent(self)
                 trials.append(game.play_agent_game(self.set_strategy(strategy),
                                                    player_2.set_strategy(player_2.strategy)))
             games.append(max(trials))

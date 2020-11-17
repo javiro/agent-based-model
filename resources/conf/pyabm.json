@@ -12,8 +12,9 @@
 	"matrix_payoffs": [],
     "show_plot_distribution": "OFF",
     "revision_protocol": "bep",
-    "number_of_simulations": 100,
-    "noise": 0.001,
+    "number_of_simulations": 10,
+    "noise": 0.0,
     "number_of_processors": 4,
+    "probability_of_edge": 0.4,
     "write_results_to_csv": true
 }

@@ -24,7 +24,7 @@ class AgentGame(object):
     def __init__(self, game_rounds, num_of_channels, n_of_agents, n_of_candidates, random_initial_condition,
                  update_strategies_mode, noise, number_of_trials=10, ticks_per_second=5, payoff_matrix=None,
                  revision_protocol=BEP, show_plot_distribution=ON, dynamic_payoff_matrix=False,
-                 number_of_steps_to_change_matrix=100):
+                 number_of_steps_to_change_matrix=100, probability_of_edge=False):
         """
         Complete matching is off since BEP does not consider it. Then the agents play his current strategy against a
         random sample of opponents. The size of this sample is specified by the parameter n-of-trials.
@@ -47,6 +47,7 @@ class AgentGame(object):
         :param revision_protocol:
         :param dynamic_payoff_matrix:
         :param number_of_steps_to_change_matrix:
+        :param probability_of_edge:
         """
         self.game_rounds = game_rounds
         self.tick = None
@@ -64,10 +65,12 @@ class AgentGame(object):
         self.dynamic_payoff_matrix = dynamic_payoff_matrix
         self.number_of_steps_to_change_matrix = number_of_steps_to_change_matrix
         self.noise = noise
+        self.probability_of_edge = probability_of_edge
         self.agents = AgentPopulation(self.n_of_agents,
                                       self.num_of_channels,
                                       self.revision_protocol,
-                                      self.random_initial_condition)
+                                      self.random_initial_condition,
+                                      self.probability_of_edge)
         self.ticks_per_second = ticks_per_second
 
     def __get_payoff_matrix(self, payoff_matrix):
