@@ -143,3 +143,11 @@ class Conf:
         :return: the number of processors.
         """
         return self.conf[NUMBER_OF_PROCESSORS]
+
+    @handle_config_parser_exception("Configuration error: ")
+    def get_probability_of_edge(self):
+        """Returns the probability of edge in the network game.
+
+        :return: the probability of edge.
+        """
+        return self.conf[PROBABILITY_OF_EDGE]

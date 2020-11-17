@@ -49,6 +49,7 @@ ALL_IN_ONE_TICK = "all_in_one_tick"
 UPDATE_STRATEGIES_MODE = "update_strategies_mode"
 NOISE = "noise"
 NUMBER_OF_PROCESSORS = "number_of_processors"
+PROBABILITY_OF_EDGE = "probability_of_edge"
 
 ########################################################################################################################
 # EXCEPTIONS
