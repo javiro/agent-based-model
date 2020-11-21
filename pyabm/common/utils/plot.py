@@ -26,8 +26,9 @@ def plot_distribution(g, ticks_per_second, distribution, plot_dist):
     plt.pause(0.0001)
 
 
-def write_partial_results_to_csv(run_number, number_of_game_rounds, distribution, number_of_simulations, revision_protocol,
-                                 update_strategies_mode, number_of_agents, number_of_channels, noise):
+def write_partial_results_to_csv(run_number, number_of_game_rounds, distribution, number_of_simulations,
+                                 revision_protocol, update_strategies_mode, number_of_agents, number_of_channels,
+                                 noise):
     pd_runs = pd.DataFrame({"run_number": run_number,
                             "step": list(range(number_of_game_rounds + 1)),
                             "strategy_ratio": distribution})
@@ -45,7 +46,7 @@ def write_partial_results_to_csv(run_number, number_of_game_rounds, distribution
 
 
 def write_result_to_csv(number_of_game_rounds, distributions, number_of_simulations, revision_protocol,
-                        update_strategies_mode, number_of_agents, number_of_channels, noise):
+                        update_strategies_mode, number_of_agents, number_of_channels, noise, probability_of_edge):
     run_numbers = [[run_number for game_round in range(number_of_game_rounds + 1)]
                    for run_number in range(number_of_simulations)]
     step = [list(range(number_of_game_rounds + 1)) for run_number in range(number_of_simulations)]

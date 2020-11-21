@@ -18,7 +18,11 @@ def play_population_game(show_plot_distribution=None):
     dynamic_payoff_matrix = conf.get_dynamic_payoff_matrix()
     number_of_steps_to_change_matrix = conf.get_number_of_steps_to_change_matrix()
     noise = conf.get_noise()
-    probability_of_edge = conf.get_probability_of_edge() if conf.get_probability_of_edge() else False
+    use_population_network = conf.get_use_population_network()
+    probability_of_edge = conf.get_probability_of_edge()
+    network_algorithm = conf.get_random_network_algorithm()
+    nearest_neighbors = conf.get_nearest_neighbors()
+    probability_of_rewiring = conf.get_probability_of_rewiring()
     if not show_plot_distribution:
         show_plot_distribution = conf.get_show_plot_distribution()
     g = AgentGame(game_rounds, num_of_channels, n_of_agents, n_of_candidates, random_initial_condition,
@@ -26,7 +30,9 @@ def play_population_game(show_plot_distribution=None):
                   revision_protocol=revision_protocol, show_plot_distribution=show_plot_distribution,
                   dynamic_payoff_matrix=dynamic_payoff_matrix,
                   number_of_steps_to_change_matrix=number_of_steps_to_change_matrix,
-                  probability_of_edge=probability_of_edge)
+                  use_population_network=use_population_network, probability_of_edge=probability_of_edge,
+                  network_algorithm=network_algorithm, nearest_neighbors=nearest_neighbors,
+                  probability_of_rewiring=probability_of_rewiring)
 
     print("The initial distribution is: {}".format(g.agents.get_strategy_distribution()))
     _, distribution_evolution = g.run_population_game()

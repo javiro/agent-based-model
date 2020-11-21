@@ -28,7 +28,8 @@ def play_n_population_game():
                             conf.get_update_strategies_mode(),
                             conf.get_number_of_agents(),
                             conf.get_number_of_channels(),
-                            conf.get_noise())
+                            conf.get_noise(),
+                            conf.get_probability_of_edge())
 
     else:
         for run_number in range(number_of_simulations):

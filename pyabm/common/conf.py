@@ -150,4 +150,36 @@ class Conf:
 
         :return: the probability of edge.
         """
-        return self.conf[PROBABILITY_OF_EDGE]
+        return self.conf[NETWORK][NETWORK_ATTRIBUTES][PROBABILITY_OF_EDGE]
+
+    @handle_config_parser_exception("Configuration error: ")
+    def get_random_network_algorithm(self):
+        """Returns the random network algorithm generator.
+
+        :return: the random network algorithm generator.
+        """
+        return self.conf[NETWORK][NETWORK_ATTRIBUTES][NETWORK_ALGORITHM]
+
+    @handle_config_parser_exception("Configuration error: ")
+    def get_nearest_neighbors(self):
+        """Returns the nearest neighbors in a ring topology.
+
+        :return: the nearest neighbors in a ring topology.
+        """
+        return self.conf[NETWORK][NETWORK_ATTRIBUTES][NEAREST_NEIGHBORS]
+
+    @handle_config_parser_exception("Configuration error: ")
+    def get_probability_of_rewiring(self):
+        """Returns the probability of rewiring.
+
+        :return: the probability of rewiring.
+        """
+        return self.conf[NETWORK][NETWORK_ATTRIBUTES][PROBABILITY_OF_REWIRING]
+
+    @handle_config_parser_exception("Configuration error: ")
+    def get_use_population_network(self):
+        """Returns bool indicating whether network structure is required or not.
+
+        :return: bool indicating whether network structure is required or not.
+        """
+        return self.conf[NETWORK][USE_NETWORK_STRUCTURE]
