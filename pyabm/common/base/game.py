@@ -5,6 +5,7 @@ from pyabm.common.base.population import AgentPopulation
 from pyabm.common.constants import *
 from pyabm.common.exceptions import PyABMException
 from pyabm.common.utils.plot import prepare_plot, plot_distribution
+from pyabm.common.workspace import Workspace
 
 
 class AgentGame(object):
@@ -21,70 +22,31 @@ class AgentGame(object):
 
     """
 
-    def __init__(self, game_rounds, num_of_channels, n_of_agents, n_of_candidates, random_initial_condition,
-                 update_strategies_mode, noise, number_of_trials=10, ticks_per_second=5, payoff_matrix=None,
-                 revision_protocol=BEP, show_plot_distribution=ON, dynamic_payoff_matrix=False,
-                 number_of_steps_to_change_matrix=100, use_population_network=False, probability_of_edge=0.0,
-                 network_algorithm="erdos-renyi", nearest_neighbors=2, probability_of_rewiring=0):
-        """
-        Complete matching is off since BEP does not consider it. Then the agents play his current strategy against a
+    def __init__(self):
+        """Complete matching is off since BEP does not consider it. Then the agents play his current strategy against a
         random sample of opponents. The size of this sample is specified by the parameter n-of-trials.
         Single sample is off, so the agent tests each of his candidate strategies against distinct, independent samples
         of n-of-trials opponents.
-
-        Parameters
-        ----------
-
-        :param game_rounds:
-        :param num_of_channels:
-        :param n_of_agents:
-        :param n_of_candidates: determines the total number of strategies the revising agent considers. The revising
-            agent’s current strategy is always part of the set of candidates.
-        :param update_strategies_mode:
-        :param noise:
-        :param number_of_trials: specifies the size of the sample of opponents to test the strategies with.
-        :param ticks_per_second: Number of ticks per second.
-        :param payoff_matrix:
-        :param revision_protocol:
-        :param dynamic_payoff_matrix:
-        :param number_of_steps_to_change_matrix:
-        :param use_population_network:
-        :param probability_of_edge:
-        :param network_algorithm:
-        :param nearest_neighbors: Each node is joined with its k nearest neighbors in a ring topology.
-        :param probability_of_rewiring:
         """
-        self.game_rounds = game_rounds
+        workspace = Workspace()
+        self.game_rounds = workspace.conf.get_number_of_game_rounds()
         self.tick = None
-        self.num_of_channels = num_of_channels
-        self.n_of_agents = n_of_agents
-        self.n_of_candidates = n_of_candidates
-        self.random_initial_condition = random_initial_condition
-        self.number_of_trials = number_of_trials
-        self.update_strategies_mode = update_strategies_mode
-        self.payoff_matrix = self.__get_payoff_matrix(payoff_matrix)
+        self.num_of_channels = workspace.conf.get_number_of_channels()
+        self.n_of_agents = workspace.conf.get_number_of_agents()
+        self.n_of_candidates = workspace.conf.get_number_of_channels()
+        self.random_initial_condition = workspace.conf.get_initial_distribution_of_strategies()
+        self.number_of_trials = workspace.conf.get_number_of_trials()
+        self.update_strategies_mode = workspace.conf.get_update_strategies_mode()
+        self.payoff_matrix = self.__get_payoff_matrix(workspace.conf.get_matrix_payoffs())
         self.maximum_payoff = np.max(self.payoff_matrix)
         self.minimum_payoff = np.min(self.payoff_matrix)
-        self.revision_protocol = revision_protocol
-        self.show_plot_distribution = show_plot_distribution
-        self.dynamic_payoff_matrix = dynamic_payoff_matrix
-        self.number_of_steps_to_change_matrix = number_of_steps_to_change_matrix
-        self.noise = noise
-        self.use_population_network = use_population_network
-        self.probability_of_edge = probability_of_edge
-        self.network_algorithm = network_algorithm
-        self.nearest_neighbors = nearest_neighbors
-        self.probability_of_rewiring = probability_of_rewiring
-        self.agents = AgentPopulation(self.n_of_agents,
-                                      self.num_of_channels,
-                                      self.revision_protocol,
-                                      self.random_initial_condition,
-                                      self.use_population_network,
-                                      self.probability_of_edge,
-                                      self.network_algorithm,
-                                      self.nearest_neighbors,
-                                      self.probability_of_rewiring)
-        self.ticks_per_second = ticks_per_second
+        self.revision_protocol = workspace.conf.get_revision_protocol()
+        self.noise = workspace.conf.get_noise()
+        self.show_plot_distribution = workspace.conf.get_show_plot_distribution()
+        self.dynamic_payoff_matrix = workspace.conf.get_dynamic_payoff_matrix()
+        self.number_of_steps_to_change_matrix = workspace.conf.get_number_of_steps_to_change_matrix()
+        self.agents = AgentPopulation()
+        self.ticks_per_second = workspace.conf.get_number_of_ticks_per_second()
 
     def __get_payoff_matrix(self, payoff_matrix):
         n = self.num_of_channels

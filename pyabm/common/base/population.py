@@ -5,6 +5,7 @@ from networkx.generators.random_graphs import binomial_graph, barabasi_albert_gr
 from networkx.generators.geometric import navigable_small_world_graph
 
 from pyabm.common.base.agent import Agent
+from pyabm.common.workspace import Workspace
 
 
 class AgentPopulation(object):
@@ -18,33 +19,20 @@ class AgentPopulation(object):
         (iv) the protocol according to which agents revise their strategies when opportunities to do so arise.
     """
 
-    def __init__(self, n_of_agents, num_of_channels, revision_protocol, random_initial_condition='ON',
-                 use_population_network=False, probability_of_edge=False, network_algorithm="erdos-renyi",
-                 nearest_neighbors=2, probability_of_rewiring=0):
-        """
-
-        :param n_of_agents:
-        :param num_of_channels:
-        :param revision_protocol:
-        :param random_initial_condition:
-        :param use_population_network:
-        :param probability_of_edge:
-        :param network_algorithm:
-        :param nearest_neighbors:
-        :param probability_of_rewiring:
-        """
-        self.n_of_agents = n_of_agents
-        self.num_of_channels = num_of_channels
-        self.revision_protocol = revision_protocol
-        self.random_initial_condition = random_initial_condition
-        self.initial_condition = self.__get_initial_condition(random_initial_condition)
-        self.use_population_network = use_population_network
+    def __init__(self):
+        workspace = Workspace()
+        self.n_of_agents = workspace.conf.get_number_of_agents()
+        self.num_of_channels = workspace.conf.get_number_of_channels()
+        self.revision_protocol = workspace.conf.get_revision_protocol()
+        self.random_initial_condition = workspace.conf.get_initial_distribution_of_strategies()
+        self.initial_condition = self.__get_initial_condition(self.random_initial_condition)
+        self.use_population_network = workspace.conf.get_use_population_network()
+        self.population = self.__populate_group()
         if self.use_population_network:
-            self.population = self.__populate_group()
-            self.probability_of_edge = probability_of_edge
-            self.network_algorithm = network_algorithm
-            self.nearest_neighbors = nearest_neighbors
-            self.probability_of_rewiring = probability_of_rewiring
+            self.probability_of_edge = workspace.conf.get_probability_of_edge()
+            self.network_algorithm = workspace.conf.get_random_network_algorithm()
+            self.nearest_neighbors = workspace.conf.get_nearest_neighbors()
+            self.probability_of_rewiring = workspace.conf.get_probability_of_rewiring()
             self.population_network = self.__get_population_network()
         print(self.revision_protocol)
 

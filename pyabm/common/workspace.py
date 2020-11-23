@@ -13,7 +13,7 @@ class Workspace(metaclass=Singleton):
         :param execution_parameters: Dictionary with the execution parameters required only for some processes, for
         example, days_to_load_from_portfolio_catalog parameter.
         """
-        self.root = root
-        self.pyabm_conf_path = path.join(self.root, "setup", "pyabm.json")
+        self.pyabm_conf_path = path.join("resources", "conf", "pyabm.json")
         self.conf = Conf(self.pyabm_conf_path)
+        self.root = root
         self.execution_parameters = execution_parameters
