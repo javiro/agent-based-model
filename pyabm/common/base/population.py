@@ -1,9 +1,11 @@
 import random
 import numpy as np
 
-from networkx.generators.random_graphs import binomial_graph
+from networkx.generators.random_graphs import binomial_graph, barabasi_albert_graph, connected_watts_strogatz_graph
+from networkx.generators.geometric import navigable_small_world_graph
 
 from pyabm.common.base.agent import Agent
+from pyabm.common.workspace import Workspace
 
 
 class AgentPopulation(object):
@@ -17,23 +19,21 @@ class AgentPopulation(object):
         (iv) the protocol according to which agents revise their strategies when opportunities to do so arise.
     """
 
-    def __init__(self, n_of_agents, num_of_channels, revision_protocol, random_initial_condition='ON',
-                 probability_of_edge=False):
-        """
-
-        :param n_of_agents:
-        :param num_of_channels:
-        :param revision_protocol:
-        :param random_initial_condition:
-        :param probability_of_edge:
-        """
-        self.n_of_agents = n_of_agents
-        self.num_of_channels = num_of_channels
-        self.revision_protocol = revision_protocol
-        self.random_initial_condition = random_initial_condition
-        self.initial_condition = self.__get_initial_condition(random_initial_condition)
+    def __init__(self):
+        workspace = Workspace()
+        self.n_of_agents = workspace.conf.get_number_of_agents()
+        self.num_of_channels = workspace.conf.get_number_of_channels()
+        self.revision_protocol = workspace.conf.get_revision_protocol()
+        self.random_initial_condition = workspace.conf.get_initial_distribution_of_strategies()
+        self.initial_condition = self.__get_initial_condition(self.random_initial_condition)
+        self.use_population_network = workspace.conf.get_use_population_network()
         self.population = self.__populate_group()
-        self.population_network = self.__get_population_network(probability_of_edge) if probability_of_edge else False
+        if self.use_population_network:
+            self.probability_of_edge = workspace.conf.get_probability_of_edge()
+            self.network_algorithm = workspace.conf.get_random_network_algorithm()
+            self.nearest_neighbors = workspace.conf.get_nearest_neighbors()
+            self.probability_of_rewiring = workspace.conf.get_probability_of_rewiring()
+            self.population_network = self.__get_population_network()
         print(self.revision_protocol)
 
     def __get_initial_condition(self, random_initial_condition):
@@ -56,14 +56,27 @@ class AgentPopulation(object):
                           for s in range(self.num_of_channels) for i in range(self.initial_condition[s])]
         return population
 
-    def __get_population_network(self, probability_of_edge):
-        """Returns a random graph, also known as an Erdős-Rényi graph or a binomial graph. It will have as many number
+    def __get_population_network(self):
+        """Returns a random graph, also known as an Erdös-Rényi graph or a binomial graph. It will have as many number
         of nodes as players.
 
-        :param probability_of_edge: float, probability for edge creation.
         :return: random graph.
         """
-        return binomial_graph(self.n_of_agents, probability_of_edge)
+        if self.network_algorithm == "erdos-renyi":
+            return binomial_graph(self.n_of_agents, self.probability_of_edge)
+        elif self.network_algorithm == "barabasi-albert":
+            print("barabasi-albert")
+            number_of_links = int(self.probability_of_edge * self.n_of_agents / 100)
+            return barabasi_albert_graph(self.n_of_agents, number_of_links)
+        elif self.network_algorithm == "small-world-Kleinberg":
+            number_of_links = self.probability_of_edge * self.n_of_agents * (self.n_of_agents - 1) * 50
+            return navigable_small_world_graph(self.n_of_agents, q=number_of_links)
+        elif self.network_algorithm == "small-world-watts-strogatz":
+            return connected_watts_strogatz_graph(
+                self.n_of_agents, k=self.nearest_neighbors, p=self.probability_of_rewiring)
+        elif self.network_algorithm == "ring":
+            print("RING")
+            return connected_watts_strogatz_graph(self.n_of_agents, k=2, p=self.probability_of_rewiring)
 
     def get_player(self, player_1):
         """Returns a random opponent avoiding the play of an agent with himself.
@@ -82,8 +95,9 @@ class AgentPopulation(object):
         :param player_1:
         :return:
         """
-        if self.population_network:
-            return self.population[random.choice(list(self.population_network.neighbors(player_1.player_id)))]
+        if self.use_population_network:
+            p2 = random.choice(list(self.population_network.neighbors(player_1.player_id)))
+            return self.population[p2]
         else:
             player_2 = self.population[random.randint(0, len(self.population) - 1)]
             while player_2 == player_1:
