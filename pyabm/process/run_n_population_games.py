@@ -27,7 +27,10 @@ def play_n_population_game():
                             workspace.conf.get_number_of_agents(),
                             workspace.conf.get_number_of_channels(),
                             workspace.conf.get_noise(),
-                            workspace.conf.get_probability_of_edge())
+                            workspace.conf.get_use_population_network(),
+                            workspace.conf.get_probability_of_edge(),
+                            workspace.conf.get_random_network_algorithm(),
+                            workspace.conf.get_probability_of_rewiring())
 
     else:
         for run_number in range(number_of_simulations):
