@@ -14,7 +14,7 @@
     "revision_protocol": "bep",
     "number_of_simulations": 10,
     "noise": 0.001,
-    "number_of_processors": 4,
+    "number_of_processors": 0,
     "network": {
         "use_network_structure": true,
         "network_attributes": {
