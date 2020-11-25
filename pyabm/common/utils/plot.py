@@ -29,21 +29,33 @@ def plot_distribution(g, ticks_per_second, distribution, plot_dist):
 def write_partial_results_to_csv(run_number, number_of_game_rounds, distribution, number_of_simulations,
                                  revision_protocol, update_strategies_mode, number_of_agents, number_of_channels,
                                  noise, use_network_structure, probability_of_edge, network_algorithm,
-                                 probability_of_rewiring):
+                                 probability_of_rewiring, nearest_neighbors):
     pd_runs = pd.DataFrame({"run_number": run_number,
                             "step": list(range(number_of_game_rounds + 1)),
                             "strategy_ratio": distribution})
     if use_network_structure:
-        filename = "python_{}_{}_strategies_{}_runs_{}_{}_agents_{}_noise_{}_rewiring_{}_net_alg_{}_prob_edge.csv" \
-                   .format(revision_protocol,
-                           number_of_channels,
-                           number_of_simulations,
-                           update_strategies_mode,
-                           number_of_agents,
-                           noise,
-                           probability_of_rewiring,
-                           network_algorithm,
-                           probability_of_edge)
+        if "sw" in network_algorithm:
+            filename = "python_{}_{}_strategies_{}_runs_{}_{}_agents_{}_noise_{}_rewiring_{}_net_alg_{}_neighbors.csv" \
+                .format(revision_protocol,
+                        number_of_channels,
+                        number_of_simulations,
+                        update_strategies_mode,
+                        number_of_agents,
+                        noise,
+                        probability_of_rewiring,
+                        network_algorithm,
+                        nearest_neighbors)
+        else:
+            filename = "python_{}_{}_strategies_{}_runs_{}_{}_agents_{}_noise_{}_rewiring_{}_net_alg_{}_prob_edge.csv" \
+                       .format(revision_protocol,
+                               number_of_channels,
+                               number_of_simulations,
+                               update_strategies_mode,
+                               number_of_agents,
+                               noise,
+                               probability_of_rewiring,
+                               network_algorithm,
+                               probability_of_edge)
         pd_runs.to_csv(filename,
                        header=True if run_number == 0 else False,
                        mode="w" if run_number == 0 else "a",

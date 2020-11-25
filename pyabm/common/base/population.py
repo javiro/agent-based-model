@@ -65,18 +65,11 @@ class AgentPopulation(object):
         if self.network_algorithm == "erdos-renyi":
             return binomial_graph(self.n_of_agents, self.probability_of_edge)
         elif self.network_algorithm == "barabasi-albert":
-            print("barabasi-albert")
-            number_of_links = int(self.probability_of_edge * self.n_of_agents / 100)
+            number_of_links = 2
             return barabasi_albert_graph(self.n_of_agents, number_of_links)
-        elif self.network_algorithm == "small-world-Kleinberg":
-            number_of_links = self.probability_of_edge * self.n_of_agents * (self.n_of_agents - 1) * 50
-            return navigable_small_world_graph(self.n_of_agents, q=number_of_links)
-        elif self.network_algorithm == "small-world-watts-strogatz":
+        elif self.network_algorithm == "sw":
             return connected_watts_strogatz_graph(
                 self.n_of_agents, k=self.nearest_neighbors, p=self.probability_of_rewiring)
-        elif self.network_algorithm == "ring":
-            print("RING")
-            return connected_watts_strogatz_graph(self.n_of_agents, k=2, p=self.probability_of_rewiring)
 
     def get_player(self, player_1):
         """Returns a random opponent avoiding the play of an agent with himself.
