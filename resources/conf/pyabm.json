@@ -19,7 +19,7 @@
         "use_network_structure": true,
         "network_attributes": {
             "probability_of_edge": 0.2,
-            "network_algorithm": "ring",
+            "network_algorithm": "sw",
             "nearest_neighbors": 2,
             "probability_of_rewiring": 0.0
         }
