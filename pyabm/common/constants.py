@@ -18,6 +18,7 @@ OFF = "OFF"
 SECONDS = "Seconds"
 DISTRIBUTION = "Distribution"
 WRITE_RESULTS_TO_CSV = "write_results_to_csv"
+A = "a"
 B = "b"
 G = "g"
 R = "r"
@@ -26,6 +27,9 @@ M = "m"
 Y = "y"
 K = "k"
 W = "w"
+RUN_NUMBER = "run_number"
+STEP = "step"
+STRATEGY_RATIO = "strategy_ratio"
 
 ########################################################################################################################
 # CONFIGURATION
@@ -56,6 +60,8 @@ PROBABILITY_OF_EDGE = "probability_of_edge"
 NETWORK_ALGORITHM = "network_algorithm"
 PROBABILITY_OF_REWIRING = "probability_of_rewiring"
 NEAREST_NEIGHBORS = "nearest_neighbors"
+WORKSPACE = "workspace"
+OUTPUTS = "outputs"
 
 ########################################################################################################################
 # EXCEPTIONS

@@ -12,9 +12,9 @@
 	"matrix_payoffs": [],
     "show_plot_distribution": "OFF",
     "revision_protocol": "bep",
-    "number_of_simulations": 10,
-    "noise": 0.001,
-    "number_of_processors": 0,
+    "number_of_simulations": 100,
+    "noise": 0.0,
+    "number_of_processors": 4,
     "network": {
         "use_network_structure": true,
         "network_attributes": {
