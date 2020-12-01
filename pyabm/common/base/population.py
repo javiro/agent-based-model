@@ -65,7 +65,7 @@ class AgentPopulation(object):
         if self.network_algorithm == "erdos-renyi":
             return binomial_graph(self.n_of_agents, self.probability_of_edge)
         elif self.network_algorithm == "barabasi-albert":
-            number_of_links = 2
+            number_of_links = 1
             return barabasi_albert_graph(self.n_of_agents, number_of_links)
         elif self.network_algorithm == "sw":
             return connected_watts_strogatz_graph(
