@@ -26,7 +26,7 @@ class AgentPopulation(object):
         self.random_initial_condition = workspace.conf.get_initial_distribution_of_strategies()
         self.initial_condition = self.__get_initial_condition(self.random_initial_condition)
         self.use_population_network = workspace.conf.get_use_population_network()
-        self.population = self.__populate_group()
+        self.population, self.population_map = self.__populate_group()
         if self.use_population_network:
             self.probability_of_edge = workspace.conf.get_probability_of_edge()
             self.network_algorithm = workspace.conf.get_random_network_algorithm()
@@ -52,7 +52,8 @@ class AgentPopulation(object):
             ids = random.sample(list(range(self.n_of_agents)), self.n_of_agents)
             population = [Agent(ids.pop(), self.num_of_channels, s, revision_protocol=self.revision_protocol)
                           for s in range(self.num_of_channels) for i in range(self.initial_condition[s])]
-        return population
+        population_map = {population[k].player_id: k for k in range(len(population))}
+        return population, population_map
 
     def __get_population_network(self):
         """Returns a random graph, also known as an Erdös-Rényi graph or a binomial graph. It will have as many number
@@ -87,9 +88,9 @@ class AgentPopulation(object):
         :return:
         """
         if self.use_population_network:
-            neighbors_indexes = list(self.population_network.neighbors(player_1.player_id))
-            p2 = random.choice([self.population[idx].player_id for idx in neighbors_indexes])
-            return self.population[p2]
+            neighbors_index = random.choice(
+                list(self.population_network.neighbors(self.population_map[player_1.player_id])))
+            return self.population[neighbors_index]
         else:
             player_2 = self.population[random.randint(0, len(self.population) - 1)]
             while player_2 == player_1:
