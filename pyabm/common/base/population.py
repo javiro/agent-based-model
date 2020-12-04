@@ -2,7 +2,6 @@ import random
 import numpy as np
 
 from networkx.generators.random_graphs import binomial_graph, barabasi_albert_graph, connected_watts_strogatz_graph
-from networkx.generators.geometric import navigable_small_world_graph
 
 from pyabm.common.base.agent import Agent
 from pyabm.common.workspace import Workspace
@@ -34,7 +33,6 @@ class AgentPopulation(object):
             self.nearest_neighbors = workspace.conf.get_nearest_neighbors()
             self.probability_of_rewiring = workspace.conf.get_probability_of_rewiring()
             self.population_network = self.__get_population_network()
-        print(self.revision_protocol)
 
     def __get_initial_condition(self, random_initial_condition):
         if random_initial_condition == 'ON':
@@ -89,7 +87,8 @@ class AgentPopulation(object):
         :return:
         """
         if self.use_population_network:
-            p2 = random.choice(list(self.population_network.neighbors(player_1.player_id)))
+            neighbors_indexes = list(self.population_network.neighbors(player_1.player_id))
+            p2 = random.choice([self.population[idx].player_id for idx in neighbors_indexes])
             return self.population[p2]
         else:
             player_2 = self.population[random.randint(0, len(self.population) - 1)]

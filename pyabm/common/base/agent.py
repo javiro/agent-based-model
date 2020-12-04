@@ -35,7 +35,8 @@ class Agent(object):
         player[strategy] = 1
         return player
 
-    def __get_test_strategies_for_bep(self, num_of_channels):
+    @staticmethod
+    def __get_test_strategies_for_bep(num_of_channels):
         strategies = list(range(num_of_channels))
         # strategies.remove(self.strategy)
         # strategies.insert(0, self.strategy)
