@@ -50,8 +50,10 @@ class AgentPopulation(object):
                           for i in range(self.n_of_agents)]
         else:
             ids = random.sample(list(range(self.n_of_agents)), self.n_of_agents)
+            strategies = random.sample(
+                [s for s in range(self.num_of_channels) for i in range(self.initial_condition[s])], self.n_of_agents)
             population = [Agent(ids.pop(), self.num_of_channels, s, revision_protocol=self.revision_protocol)
-                          for s in range(self.num_of_channels) for i in range(self.initial_condition[s])]
+                          for s in strategies]
         population_map = {population[k].player_id: k for k in range(len(population))}
         return population, population_map
 
