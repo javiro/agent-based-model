@@ -1,7 +1,6 @@
 import json
 
 from pyabm.common.constants import *
-from pyabm.common.exceptions import PyABMException
 from pyabm.common.utils.decorators import handle_config_parser_exception
 
 
@@ -83,18 +82,6 @@ class Conf:
         :return: the show plot distribution.
         """
         return self.conf[SHOW_PLOT_DISTRIBUTION]
-
-    @handle_config_parser_exception("Configuration error: ")
-    def get_revision_protocol(self):
-        """Returns the revision protocol: bep, pairwise_difference or linear_dissatisfaction.
-
-        :return: the revision protocol.
-        """
-        revision_protocol = self.conf[REVISION_PROTOCOL]
-        allowed_protocols = [BEP, PAIRWISE_DIFFERENCE, LINEAR_DISSATISFACTION]
-        if revision_protocol not in allowed_protocols:
-            raise PyABMException(NOT_VALID_PROTOCOL.format(revision_protocol, allowed_protocols))
-        return revision_protocol
 
     @handle_config_parser_exception("Configuration error: ")
     def get_number_of_simulations(self):

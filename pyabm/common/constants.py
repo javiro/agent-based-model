@@ -1,12 +1,4 @@
 ########################################################################################################################
-# AGENT
-########################################################################################################################
-BEP = "bep"
-PAIRWISE_DIFFERENCE = "pairwise-difference"
-LINEAR_DISSATISFACTION = "linear-dissatisfaction"
-LINEAR_ATTRACTION = "linear-attraction"
-
-########################################################################################################################
 # COMMON
 ########################################################################################################################
 ON = "ON"
@@ -62,9 +54,11 @@ PROBABILITY_OF_REWIRING = "probability_of_rewiring"
 NEAREST_NEIGHBORS = "nearest_neighbors"
 WORKSPACE = "workspace"
 OUTPUTS = "outputs"
+BARABASI_ALBERT = "barabasi-albert"
+SMALL_WORLD = "sw"
 
 ########################################################################################################################
 # EXCEPTIONS
 ########################################################################################################################
-NOT_VALID_PROTOCOL = "The protocol {} is not valid. It must be one of: {}."
+NOT_VALID_NETWORK_ALGORITHM = "The network algorithm {} is not valid. It must be one of: {}."
 UPDATE_STRATEGIES_MODE_REQUIRED = "One update strategy mode must be specified."
