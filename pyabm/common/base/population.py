@@ -1,10 +1,12 @@
 import random
 import numpy as np
 
-from networkx.generators.random_graphs import binomial_graph, barabasi_albert_graph, connected_watts_strogatz_graph
+from networkx.generators.random_graphs import barabasi_albert_graph, connected_watts_strogatz_graph
 
 from pyabm.common.base.agent import Agent
+from pyabm.common.constants import NOT_VALID_NETWORK_ALGORITHM, BARABASI_ALBERT, SMALL_WORLD
 from pyabm.common.workspace import Workspace
+from pyabm.common.exceptions import PyABMException
 
 
 class AgentPopulation(object):
@@ -22,7 +24,6 @@ class AgentPopulation(object):
         workspace = Workspace()
         self.n_of_agents = workspace.conf.get_number_of_agents()
         self.num_of_channels = workspace.conf.get_number_of_channels()
-        self.revision_protocol = workspace.conf.get_revision_protocol()
         self.random_initial_condition = workspace.conf.get_initial_distribution_of_strategies()
         self.initial_condition = self.__get_initial_condition(self.random_initial_condition)
         self.use_population_network = workspace.conf.get_use_population_network()
@@ -46,31 +47,30 @@ class AgentPopulation(object):
 
     def __populate_group(self):
         if self.random_initial_condition == 'ON':
-            population = [Agent(i, self.num_of_channels, revision_protocol=self.revision_protocol)
-                          for i in range(self.n_of_agents)]
+            population = [Agent(i, self.num_of_channels) for i in range(self.n_of_agents)]
         else:
             ids = random.sample(list(range(self.n_of_agents)), self.n_of_agents)
             strategies = random.sample(
                 [s for s in range(self.num_of_channels) for i in range(self.initial_condition[s])], self.n_of_agents)
-            population = [Agent(ids.pop(), self.num_of_channels, s, revision_protocol=self.revision_protocol)
-                          for s in strategies]
+            population = [Agent(ids.pop(), self.num_of_channels, s) for s in strategies]
         population_map = {population[k].player_id: k for k in range(len(population))}
         return population, population_map
 
     def __get_population_network(self):
-        """Returns a random graph, also known as an Erdös-Rényi graph or a binomial graph. It will have as many number
-        of nodes as players.
+        """Returns a random graph built following one of these algorithms: Barabasi-Albert o Small World. It will have
+        as many number of nodes as players.
 
         :return: random graph.
         """
-        if self.network_algorithm == "erdos-renyi":
-            return binomial_graph(self.n_of_agents, self.probability_of_edge)
-        elif self.network_algorithm == "barabasi-albert":
+        if self.network_algorithm == BARABASI_ALBERT:
             number_of_links = 1
             return barabasi_albert_graph(self.n_of_agents, number_of_links)
-        elif self.network_algorithm == "sw":
+        elif self.network_algorithm == SMALL_WORLD:
             return connected_watts_strogatz_graph(
                 self.n_of_agents, k=self.nearest_neighbors, p=self.probability_of_rewiring)
+        else:
+            raise PyABMException(
+                NOT_VALID_NETWORK_ALGORITHM.format(self.network_algorithm, [BARABASI_ALBERT, SMALL_WORLD]))
 
     def get_player(self, player_1):
         """Returns a random opponent avoiding the play of an agent with himself.
