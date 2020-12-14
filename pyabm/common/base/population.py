@@ -4,7 +4,7 @@ import numpy as np
 from networkx.generators.random_graphs import barabasi_albert_graph, connected_watts_strogatz_graph
 
 from pyabm.common.base.agent import Agent
-from pyabm.common.constants import NOT_VALID_NETWORK_ALGORITHM, BARABASI_ALBERT, SMALL_WORLD
+from pyabm.common.constants import NOT_VALID_NETWORK_ALGORITHM, BARABASI_ALBERT, SMALL_WORLD, ON
 from pyabm.common.workspace import Workspace
 from pyabm.common.exceptions import PyABMException
 
@@ -36,7 +36,7 @@ class AgentPopulation(object):
             self.population_network = self.__get_population_network()
 
     def __get_initial_condition(self, random_initial_condition):
-        if random_initial_condition == 'ON':
+        if random_initial_condition == ON:
             random_initial_distribution = []
             return random_initial_distribution
 
@@ -46,7 +46,7 @@ class AgentPopulation(object):
             return random_initial_distribution
 
     def __populate_group(self):
-        if self.random_initial_condition == 'ON':
+        if self.random_initial_condition == ON:
             population = [Agent(i, self.num_of_channels) for i in range(self.n_of_agents)]
         else:
             ids = random.sample(list(range(self.n_of_agents)), self.n_of_agents)

@@ -3,14 +3,14 @@ import numpy as np
 
 
 class Agent(object):
-    """Class which implements the agents in communication game."""
+    """Class which implements the individual actors in the game."""
 
     def __init__(self, player_id, num_of_channels, strategy=None):
         """
 
-        :param player_id:
-        :param num_of_channels:
-        :param strategy:
+        :param player_id: integer, between zero and the number of players minus one, which holds the id.
+        :param num_of_channels: integer, holding the number of available strategies.
+        :param strategy: integer, representing the initial strategy followed by the agent.
         """
         self.player_id = player_id
         self.num_of_channels = num_of_channels
@@ -33,17 +33,20 @@ class Agent(object):
 
     @staticmethod
     def __get_test_strategies_for_bep(num_of_channels):
+        """Returns the set of strategies that will be tested by the agent who is reviewing.
+
+        :param num_of_channels: integer, holding the number of available strategies.
+        :return: list with the set of strategy's index to be tested.
+        """
         strategies = list(range(num_of_channels))
         return strategies
 
     def update_strategy_under_bep_protocol(self, game):
-        """Under the best experienced payoff protocol, a revising agent tests each of the 'n_of_candidates' of
-        strategies against a random agent, with each play of each strategy being against a newly drawn opponent. The
-        revising agent then selects the strategy that obtained the greater payoff in the test, with ties resolved at
-        random.
+        """Under the best experienced payoff protocol, a revising agent tests each of the strategies against a  new
+        randomly drawn opponent. The revising agent then selects the strategy that obtained the greatest payoff. In
+        case of ties, they are resolved randomly.
 
-        :param game:
-        :return:
+        :param game: an instance of the current game.
         """
         games = []
         n_of_candidates = self.__get_test_strategies_for_bep(game.num_of_channels)
@@ -59,7 +62,7 @@ class Agent(object):
         self.strategy = n_of_candidates[random.choice(np.where(games == np.max(games))[0])]
 
     def update_strategy(self, game):
-        """Updates the strategy following the specified protocol.
+        """Updates the strategy following the BEP protocol.
 
         :param game: an instance of the current game.
         """
