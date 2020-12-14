@@ -92,22 +92,6 @@ class Conf:
         return self.conf[NUMBER_OF_SIMULATIONS]
 
     @handle_config_parser_exception("Configuration error: ")
-    def get_dynamic_payoff_matrix(self):
-        """Returns true if we want the payoff matrix to change in time.
-
-        :return: the dynamic payoff matrix.
-        """
-        return self.conf[DYNAMIC_PAYOFF_MATRIX]
-
-    @handle_config_parser_exception("Configuration error: ")
-    def get_number_of_steps_to_change_matrix(self):
-        """Returns the number of steps to change the payoff matrix.
-
-        :return: the number of steps to change matrix.
-        """
-        return self.conf[NUMBER_OF_STEPS_TO_CHANGE_MATRIX]
-
-    @handle_config_parser_exception("Configuration error: ")
     def get_write_results_to_csv(self):
         """Returns True if write results to csv is required and False otherwise.
 

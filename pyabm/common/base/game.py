@@ -36,12 +36,8 @@ class AgentGame(object):
         self.number_of_trials = workspace.conf.get_number_of_trials()
         self.update_strategies_mode = workspace.conf.get_update_strategies_mode()
         self.payoff_matrix = self.__get_payoff_matrix(workspace.conf.get_matrix_payoffs())
-        self.maximum_payoff = np.max(self.payoff_matrix)
-        self.minimum_payoff = np.min(self.payoff_matrix)
         self.noise = workspace.conf.get_noise()
         self.show_plot_distribution = workspace.conf.get_show_plot_distribution()
-        self.dynamic_payoff_matrix = workspace.conf.get_dynamic_payoff_matrix()
-        self.number_of_steps_to_change_matrix = workspace.conf.get_number_of_steps_to_change_matrix()
         self.agents = AgentPopulation()
         self.ticks_per_second = workspace.conf.get_number_of_ticks_per_second()
 
@@ -79,26 +75,12 @@ class AgentGame(object):
         else:
             raise PyABMException(UPDATE_STRATEGIES_MODE_REQUIRED)
 
-    def update_payoff_matrix(self, g):
-        if self.payoff_matrix.shape[0] == 2:
-            if (g != 0) & (g % self.number_of_steps_to_change_matrix == 0):
-                np.fill_diagonal(self.payoff_matrix,
-                                 np.array(range(1, self.num_of_channels + 1))[self.payoff_matrix.diagonal() %
-                                                                              self.num_of_channels])
-
     def logging_distributions(self, g, plot_dist):
         distribution = self.agents.get_strategy_distribution()
         if self.show_plot_distribution == ON:
             plot_distribution(g, self.ticks_per_second, distribution, plot_dist)
         else:
             plot_dist.append(distribution[-1] / self.n_of_agents)
-            # print("tick: {}, ratio: {}".format(g, distribution[-1] / self.n_of_agents))
-        # if self.num_of_channels < 3:
-        #     print("Percentage of strategy 2 at time {}: {}"
-        #           .format(g / self.ticks_per_second, distribution[-1] / self.n_of_agents))
-        # else:
-        #     print("Distribution of strategies at time {}: {}"
-        #           .format(g / self.ticks_per_second, distribution / self.n_of_agents))
 
     def run_population_game(self):
         """Starts up the clock and runs the population game allowing some agents to review their strategies, at each
@@ -118,7 +100,5 @@ class AgentGame(object):
             self.update_strategies()
             if tick % self.ticks_per_second == 0:
                 self.logging_distributions(tick, plot_dist)
-                if self.dynamic_payoff_matrix:
-                    self.update_payoff_matrix(tick)
 
         return self.agents.get_strategy_distribution(), plot_dist
