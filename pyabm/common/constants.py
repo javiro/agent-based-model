@@ -60,3 +60,5 @@ SMALL_WORLD = "sw"
 ########################################################################################################################
 NOT_VALID_NETWORK_ALGORITHM = "The network algorithm {} is not valid. It must be one of: {}."
 UPDATE_STRATEGIES_MODE_REQUIRED = "One update strategy mode must be specified."
+INITIAL_CONDITION_DO_NOT_MATCH_THE_NUMBER_OF_PLAYERS = "Initial condition do not match the number of players."
+INITIAL_CONDITION_DO_NOT_MATCH_THE_NUMBER_OF_CHANNELS = "Initial condition do not match the number of channels."
