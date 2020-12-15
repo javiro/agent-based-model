@@ -39,9 +39,12 @@ class AgentPopulation(object):
             raise PyABMException(INITIAL_CONDITION_DO_NOT_MATCH_THE_NUMBER_OF_CHANNELS)
 
     def __populate_group(self):
-        """
+        """It settles the crowd of agents following the initial condition in case it were required or randomly
+        otherwise. It's important to note that it ensures that the strategies are randomly spread.
 
         :return:
+            - A crowded instance of the classed.
+            - Python dictionary which maps the id to the index within the instance.
         """
         if self.random_initial_condition == ON:
             population = [Agent(i, self.num_of_channels) for i in range(self.n_of_agents)]
