@@ -1,7 +1,6 @@
 import json
 
 from pyabm.common.constants import *
-from pyabm.common.exceptions import PyABMException
 from pyabm.common.utils.decorators import handle_config_parser_exception
 
 
@@ -85,40 +84,12 @@ class Conf:
         return self.conf[SHOW_PLOT_DISTRIBUTION]
 
     @handle_config_parser_exception("Configuration error: ")
-    def get_revision_protocol(self):
-        """Returns the revision protocol: bep, pairwise_difference or linear_dissatisfaction.
-
-        :return: the revision protocol.
-        """
-        revision_protocol = self.conf[REVISION_PROTOCOL]
-        allowed_protocols = [BEP, PAIRWISE_DIFFERENCE, LINEAR_DISSATISFACTION]
-        if revision_protocol not in allowed_protocols:
-            raise PyABMException(NOT_VALID_PROTOCOL.format(revision_protocol, allowed_protocols))
-        return revision_protocol
-
-    @handle_config_parser_exception("Configuration error: ")
     def get_number_of_simulations(self):
         """Returns the number of simulations to carry on.
 
         :return: the number of simulations.
         """
         return self.conf[NUMBER_OF_SIMULATIONS]
-
-    @handle_config_parser_exception("Configuration error: ")
-    def get_dynamic_payoff_matrix(self):
-        """Returns true if we want the payoff matrix to change in time.
-
-        :return: the dynamic payoff matrix.
-        """
-        return self.conf[DYNAMIC_PAYOFF_MATRIX]
-
-    @handle_config_parser_exception("Configuration error: ")
-    def get_number_of_steps_to_change_matrix(self):
-        """Returns the number of steps to change the payoff matrix.
-
-        :return: the number of steps to change matrix.
-        """
-        return self.conf[NUMBER_OF_STEPS_TO_CHANGE_MATRIX]
 
     @handle_config_parser_exception("Configuration error: ")
     def get_write_results_to_csv(self):

@@ -1,12 +1,4 @@
 ########################################################################################################################
-# AGENT
-########################################################################################################################
-BEP = "bep"
-PAIRWISE_DIFFERENCE = "pairwise-difference"
-LINEAR_DISSATISFACTION = "linear-dissatisfaction"
-LINEAR_ATTRACTION = "linear-attraction"
-
-########################################################################################################################
 # COMMON
 ########################################################################################################################
 ON = "ON"
@@ -46,8 +38,6 @@ MATRIX_PAYOFFS = "matrix_payoffs"
 SHOW_PLOT_DISTRIBUTION = "show_plot_distribution"
 REVISION_PROTOCOL = "revision_protocol"
 NUMBER_OF_SIMULATIONS = "number_of_simulations"
-DYNAMIC_PAYOFF_MATRIX = "dynamic_payoff_matrix"
-NUMBER_OF_STEPS_TO_CHANGE_MATRIX = "number_of_steps_to_change_matrix"
 ASYNCHRONOUS_RANDOM_INDEPENDENT = "asynchronous_random_independent"
 ALL_IN_ONE_TICK = "all_in_one_tick"
 UPDATE_STRATEGIES_MODE = "update_strategies_mode"
@@ -62,9 +52,13 @@ PROBABILITY_OF_REWIRING = "probability_of_rewiring"
 NEAREST_NEIGHBORS = "nearest_neighbors"
 WORKSPACE = "workspace"
 OUTPUTS = "outputs"
+BARABASI_ALBERT = "barabasi-albert"
+SMALL_WORLD = "sw"
 
 ########################################################################################################################
 # EXCEPTIONS
 ########################################################################################################################
-NOT_VALID_PROTOCOL = "The protocol {} is not valid. It must be one of: {}."
+NOT_VALID_NETWORK_ALGORITHM = "The network algorithm {} is not valid. It must be one of: {}."
 UPDATE_STRATEGIES_MODE_REQUIRED = "One update strategy mode must be specified."
+INITIAL_CONDITION_DO_NOT_MATCH_THE_NUMBER_OF_PLAYERS = "Initial condition do not match the number of players."
+INITIAL_CONDITION_DO_NOT_MATCH_THE_NUMBER_OF_CHANNELS = "Initial condition do not match the number of channels."
