@@ -28,14 +28,12 @@ There are number_of_channels possible strategies.
 
 The user can define the matrix of payoffs in the configuration file. In case it were not provided it would be defined as:
 
-$$
-\begin{pmatrix}
+$\begin{pmatrix}
 1 & 0 & \cdots & 0\\
 0 & 2 & \cdots & 0\\
 \vdots & \vdots & \ddots & \vdots\\
 0 & 0 & \cdots & \textrm{number_of_channels}
-\end{pmatrix} 
-$$
+\end{pmatrix}$
 
 ### Sequence of events
 
