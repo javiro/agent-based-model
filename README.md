@@ -46,16 +46,15 @@ following sequence of events takes place:
     The order of the population is resampled.
     If updating mode is set to "all-in-one-tick":
       The process goes over the whole population and every agent revises her strategy and updates it.
-    If updating mode is set to "all-in-one-tick":
-      The following process is repeated "number_of_agents" times:
+    If updating mode is set to "asynchronous_random_independent":
+      The following process is repeated a number of times equal to number_of_agents:
         One agent is chosen at random to revisit her strategy and update it.
     Revising agents test each strategy a number of times equal to number_of_trials:
         If there is network structure:
           Each revising agent selects a new opponent among her neighbors at random to play with.
         If there is no network structure:
           Each revising agent selects a new opponent at random to play with.
-        The revising agent chooses the strategy which got the highest payoff. In case of ties, she chooses one of the
-        best randomly with uniform distribution.
+    The revising agent chooses the strategy which got the highest payoff. In case of ties, she chooses one of the best randomly with uniform distribution.
 
 This sequence of events is repeated iteratively.
 
