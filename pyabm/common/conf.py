@@ -1,6 +1,7 @@
 import json
 
 from pyabm.common.constants import *
+from pyabm.common.exceptions import PyABMException
 from pyabm.common.utils.decorators import handle_config_parser_exception
 
 
@@ -57,7 +58,12 @@ class Conf:
 
         :return: the update strategies mode.
         """
-        return self.conf[UPDATE_STRATEGIES_MODE]
+        update_strategies_mode = self.conf[UPDATE_STRATEGIES_MODE]
+        allowed_values = [ASYNCHRONOUS_RANDOM_INDEPENDENT, ALL_IN_ONE_TICK]
+        if update_strategies_mode not in allowed_values:
+            raise PyABMException(NOT_VALID_CONFIGURATION_PARAMETER.format(update_strategies_mode, allowed_values))
+        else:
+            return update_strategies_mode
 
     @handle_config_parser_exception("Configuration error: ")
     def get_number_of_trials(self):
@@ -73,7 +79,7 @@ class Conf:
 
         :return: the matrix of payoffs.
         """
-        return self.conf[MATRIX_PAYOFFS]
+        return self.conf.get(MATRIX_PAYOFFS, [])
 
     @handle_config_parser_exception("Configuration error: ")
     def get_show_plot_distribution(self):
@@ -81,7 +87,7 @@ class Conf:
 
         :return: the show plot distribution.
         """
-        return self.conf[SHOW_PLOT_DISTRIBUTION]
+        return self.conf.get(SHOW_PLOT_DISTRIBUTION, OFF)
 
     @handle_config_parser_exception("Configuration error: ")
     def get_number_of_simulations(self):
