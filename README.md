@@ -22,24 +22,53 @@ There is one population consisting of *number_of_agents* individuals who play a 
 
 ### Strategies
 
+There are number_of_channels possible strategies.
 
 ### Payoffs
 
+The user can define the matrix of payoffs in the configuration file. In case it were not provided it would be defined as:
+
+$$
+\begin{pmatrix}
+1 & 0 & \cdots & 0\\
+0 & 2 & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & \textrm{number_of_channels}
+\end{pmatrix} 
+$$
 
 ### Sequence of events
 
-- Under construction.
+Initially, if no distribution of strategies is provided, it is fixed randomly. Then, the agents are assigned a strategy 
+following such distribution at random. The model runs in discrete time-steps called ticks. Within each tick the 
+following sequence of events takes place:
 
-### Classes.
+    The order of the population is resampled.
+    If updating mode is set to "all-in-one-tick":
+      The process goes over the whole population and every agent revises her strategy and updates it.
+    If updating mode is set to "all-in-one-tick":
+      The following process is repeated "number_of_agents" times:
+        One agent is chosen at random to revisit her strategy and update it.
+    Revising agents test each strategy a number of times equal to number_of_trials:
+        If there is network structure:
+          Each revising agent selects a new opponent among her neighbors at random to play with.
+        If there is no network structure:
+          Each revising agent selects a new opponent at random to play with.
+        The revising agent chooses the strategy which got the highest payoff. In case of ties, she chooses one of the
+        best randomly with uniform distribution.
 
-#### Agent.
+This sequence of events is repeated iteratively.
+
+### Classes
+
+#### Agent
 
 The agents are the minimal interacting units in the simulation. They can:
 - set_strategy
 - update_strategy --> update_strategy_under_bep_protocol
 
 
-#### Game.
+#### Game
 
 Class which implements the game regarding the revision protocol process.
 
@@ -51,7 +80,7 @@ It has these methods:
 - logging_distributions
 - run_population_game
 
-#### Population.
+#### Population
 
 Class which implements the populations of players.
 
