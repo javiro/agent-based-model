@@ -6,7 +6,7 @@ class Agent(object):
     """Class which implements the individual actors in the game."""
 
     def __init__(self, player_id, num_of_channels, strategy=None):
-        """
+        """Agent initialization.
 
         :param player_id: integer, between zero and the number of players minus one, which holds the id.
         :param num_of_channels: integer, holding the number of available strategies.
